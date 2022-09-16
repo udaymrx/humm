@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
+import '../../app/colors.dart';
+
+class ArtistTile extends StatelessWidget {
+  const ArtistTile({super.key, required this.artist});
+
+  final ArtistModel artist;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        artist.artist,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.visible,
+      ),
+      subtitle: Text(
+        "${artist.numberOfAlbums} albums  |  ${artist.numberOfTracks} songs",
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.grey,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      leading: CircleAvatar(
+        radius: 35,
+        child: Icon(
+          Icons.person,
+          size: 30,
+        ),
+      ),
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.more_vert),
+      ),
+    );
+  }
+}
