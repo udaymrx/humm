@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:humm/src/view/albums/album_song_page.dart';
+import 'package:humm/src/view/artists/artist_song_page.dart';
 import 'package:humm/src/view/folders/folder_page.dart';
 import 'package:humm/src/view/home/home_page.dart';
 import 'package:humm/src/view/songs/song_page.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import '../view/settings/settings_page.dart';
 
 class RouterNav {
@@ -11,39 +12,72 @@ class RouterNav {
     // Getting arguments passed in while calling Navigator.pushNamed
     // Uncomment below line to use page arguments.
     final args = routeSettings.arguments;
-    return MaterialPageRoute<void>(
-      settings: routeSettings,
-      builder: (BuildContext context) {
-        switch (routeSettings.name) {
-          case HomePage.routeName:
-            return const HomePage();
-          case SettingsPage.routeName:
-            return const SettingsPage();
-          case SongPage.routeName:
-            return const SongPage();
-          case FolderPage.routeName:
-            if (args is String) {
-              return FolderPage(path: args);
-            }
-            return _errorRoute(routeSettings.name!);
-          default:
-            return _errorRoute(routeSettings.name!);
+    switch (routeSettings.name) {
+      case HomePage.routeName:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+      case SettingsPage.routeName:
+        return MaterialPageRoute(builder: (_) => const SettingsPage());
+      case SongPage.routeName:
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const SongPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.ease;
+
+              final tween = Tween(begin: begin, end: end);
+              final curvedAnimation = CurvedAnimation(
+                parent: animation,
+                curve: curve,
+              );
+
+              return SlideTransition(
+                position: tween.animate(curvedAnimation),
+                child: child,
+              );
+            });
+      case FolderPage.routeName:
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (_) => FolderPage(path: args),
+          );
         }
-      },
-    );
+        return _errorRoute(routeSettings.name!);
+      case ArtistPage.routeName:
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (_) => ArtistPage(artist: args),
+          );
+        }
+        return _errorRoute(routeSettings.name!);
+      case AlbumPage.routeName:
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (_) => AlbumPage(album: args),
+          );
+        }
+        return _errorRoute(routeSettings.name!);
+      default:
+        // If there is no such named route in the switch statement, e.g. /third
+        return _errorRoute(routeSettings.name!);
+    }
   }
 
-  static Widget _errorRoute(String name) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Error'),
-      ),
-      body: Center(
-        child: Text(
-          'No route defined for $name',
-          style: const TextStyle(color: Colors.red),
+  static Route<dynamic> _errorRoute(String name) {
+    return MaterialPageRoute(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
         ),
-      ),
-    );
+        body: Center(
+          child: Text(
+            'No route defined for $name',
+            style: const TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+    });
   }
 }

@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
-import 'package:humm/src/services/music_player_service.dart';
 import 'package:humm/src/view/songs/music_tile.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-
-import 'song_page.dart';
-
-final songsProvider = FutureProvider<List<SongModel>>((ref) async {
-  final audioService = ref.read(audioQueryProvider);
-
-  return audioService.getSongs();
-});
+import 'package:just_audio_background/just_audio_background.dart';
 
 class SongsList extends StatefulWidget {
   const SongsList({super.key});
@@ -25,7 +16,13 @@ class _SongsListState extends State<SongsList> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final res = ref.watch(songsProvider);
+        final res = ref.watch(allSongProvider);
+        ref.listen(playerStateProvider, (previous, next) {
+          next.whenData((value) {
+            debugPrint(value.processingState.name);
+          });
+        });
+
         return res.when(
           data: (data) {
             if (data.isNotEmpty) {
@@ -34,18 +31,54 @@ class _SongsListState extends State<SongsList> {
                   return InkWell(
                     onTap: () async {
                       final player = ref.read(playerProvider);
-                      if (player.audioSource == null) {
-                        debugPrint("hi");
-                        await ref
-                            .read(playerProvider.notifier)
-                            .initSource(data);
-                      } else {
-                        debugPrint('hello');
+
+                      await ref
+                          .read(playlistController.notifier)
+                          .addSong(data[index]);
+                      await player.seek(Duration.zero, index: index);
+                      if (!player.playing) {
+                        player.play();
                       }
-                      player.seek(Duration.zero, index: index);
-                      player.play();
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, SongPage.routeName);
+                      // if (player.audioSource!.sequence.isEmpty) {
+                      //   // add sources
+                      //   print("initialising source");
+                      //   var newlist = data.skip(index).toList();
+                      //   await ref
+                      //       .read(playlistController.notifier)
+                      //       .addPlaylist(newlist);
+                      //   await player.play();
+                      // } else {
+                      //   // not added song
+                      //   print(" source exisit");
+                      //   print("avil indices:  ${player.effectiveIndices}");
+                      //   print(
+                      //       "contains: ${player.effectiveIndices?.contains(index)}");
+
+                      //   final val = player.sequenceState?.currentSource?.tag
+                      //       as MediaItem;
+                      //   val.title == data[index].displayNameWOExt;
+
+                      //   if (!(player.effectiveIndices?.contains(index) ??
+                      //       false)) {
+                      //     print(" song not added");
+
+                      //     await ref
+                      //         .read(playlistController.notifier)
+                      //         .addSong(data[index]);
+                      //     await player.seek(Duration.zero, index: index);
+                      //     if (!player.playing) {
+                      //       player.play();
+                      //     }
+                      //   } else {
+                      //     print(" replying song");
+
+                      //     // already added song
+                      //     await player.seek(Duration.zero, index: index);
+                      //     if (!player.playing) {
+                      //       player.play();
+                      //     }
+                      //   }
+                      // }
                     },
                     child: MusicTile(
                       song: data[index],

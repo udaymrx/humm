@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:humm/src/app/colors.dart';
-import 'package:humm/src/services/music_player_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
-import '../../data/model/song_meta_model.dart';
+import '../../app/global_provider.dart';
 import 'music_tile.dart';
 
 class SongPage extends ConsumerWidget {
@@ -34,47 +34,50 @@ class SongPage extends ConsumerWidget {
                     if (state?.sequence.isEmpty ?? true) {
                       return const SizedBox();
                     }
-                    final metadata = state!.currentSource!.tag as AudioMetadata;
+                    final metadata = state!.currentSource!.tag as MediaItem;
                     return Column(
                       children: [
-                        Container(
-                          height: 356,
-                          width: double.maxFinite,
-                          margin: const EdgeInsets.only(right: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(36),
-                            color: AppColors.primary,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(36),
-                            child: Consumer(builder: (context, ref, child) {
-                              final res =
-                                  ref.watch(songArtProvider(metadata.id));
+                        Hero(
+                          tag: "Art",
+                          child: Container(
+                            height: 356,
+                            width: double.maxFinite,
+                            margin: const EdgeInsets.only(right: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(36),
+                              color: AppColors.primary,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(36),
+                              child: Consumer(builder: (context, ref, child) {
+                                final res = ref.watch(
+                                    songArtProvider(int.parse(metadata.id)));
 
-                              return res.when(
-                                data: (data) {
-                                  if (data != null) {
-                                    return Image.memory(data);
-                                  } else {
-                                    return const Icon(
-                                      Icons.music_note,
-                                      size: 30,
-                                      color: AppColors.white,
-                                    );
-                                  }
-                                },
-                                error: (e, s) => const Icon(
-                                  Icons.music_note,
-                                  color: AppColors.white,
-                                  size: 30,
-                                ),
-                                loading: () => const Icon(
-                                  Icons.music_note,
-                                  size: 30,
-                                  color: AppColors.white,
-                                ),
-                              );
-                            }),
+                                return res.when(
+                                  data: (data) {
+                                    if (data != null) {
+                                      return Image.memory(data);
+                                    } else {
+                                      return const Icon(
+                                        Icons.music_note,
+                                        size: 30,
+                                        color: AppColors.white,
+                                      );
+                                    }
+                                  },
+                                  error: (e, s) => const Icon(
+                                    Icons.music_note,
+                                    color: AppColors.white,
+                                    size: 30,
+                                  ),
+                                  loading: () => const Icon(
+                                    Icons.music_note,
+                                    size: 30,
+                                    color: AppColors.white,
+                                  ),
+                                );
+                              }),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -89,7 +92,7 @@ class SongPage extends ConsumerWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          metadata.artist,
+                          metadata.artist!,
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -114,14 +117,20 @@ class SongPage extends ConsumerWidget {
                     return res.when(
                       data: (data) {
                         var valid = data.duration.compareTo(data.position) >= 0;
-                        return Text(
-                          (valid ? data.position : data.duration)
-                              .toString()
-                              .substring(2, 7),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.greyStrong),
+                        return Hero(
+                          tag: "title",
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              (valid ? data.position : data.duration)
+                                  .toString()
+                                  .substring(2, 7),
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.greyStrong),
+                            ),
+                          ),
                         );
                       },
                       error: (error, st) => const SizedBox(),
@@ -132,12 +141,18 @@ class SongPage extends ConsumerWidget {
                     final res = ref.watch(remainingProvider);
                     return res.when(
                       data: (rem) {
-                        return Text(
-                          rem.toString().substring(2, 7),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.greyStrong),
+                        return Hero(
+                          tag: 'artist',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              rem.toString().substring(2, 7),
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.greyStrong),
+                            ),
+                          ),
                         );
                       },
                       error: (error, st) => const SizedBox(),
@@ -195,6 +210,7 @@ class SongPage extends ConsumerWidget {
 
                     ref.listen(playerStateProvider, (previous, next) {
                       next.whenData((value) {
+                        // debugPrint(value.processingState.name);
                         if (value.processingState ==
                             ProcessingState.completed) {
                           debugPrint("playing completed");

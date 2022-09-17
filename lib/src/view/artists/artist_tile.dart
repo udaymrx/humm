@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:humm/src/view/artists/artist_song_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/colors.dart';
@@ -11,6 +12,9 @@ class ArtistTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+       onTap: () {
+        Navigator.pushNamed(context, ArtistPage.routeName,arguments: artist.artist);
+      },
       title: Text(
         artist.artist,
         style: const TextStyle(

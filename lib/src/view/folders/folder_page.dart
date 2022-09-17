@@ -27,11 +27,15 @@ class FolderPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(path.split('/').last),
       ),
-      // Because Folder song is not loading
-      body: SongsList(),
-      // body: FolderSongsList(
-      //   path: path,
-      // ),
+      body: FolderSongsList(path: path),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // final lst = ref.read(albumFilterSongProvider(album));
+        },
+        child: const Icon(
+          Icons.play_arrow_rounded,
+        ),
+      ),
     );
   }
 }
@@ -49,8 +53,21 @@ class FolderSongsList extends ConsumerWidget {
           if (data.isNotEmpty) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                return MusicTile(
-                  song: data[index],
+                return InkWell(
+                  onTap: () async {
+                    final player = ref.read(playerProvider);
+
+                    await ref
+                        .read(playlistController.notifier)
+                        .addSong(data[index]);
+                    await player.seek(Duration.zero, index: index);
+                    if (!player.playing) {
+                      player.play();
+                    }
+                  },
+                  child: MusicTile(
+                    song: data[index],
+                  ),
                 );
               },
               itemCount: data.length,

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:humm/src/app/colors.dart';
-import 'package:humm/src/services/music_player_service.dart';
 import 'package:humm/src/view/albums/album_list.dart';
 import 'package:humm/src/view/artists/artist_list.dart';
 import 'package:humm/src/view/folders/folder_list.dart';
+import 'package:humm/src/view/home/mini_player.dart';
 import 'package:humm/src/view/songs/songs_list.dart';
 
+import '../../app/global_provider.dart';
 import '../settings/settings_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -16,7 +17,7 @@ class HomePage extends ConsumerStatefulWidget {
   static const routeName = '/';
 
   @override
-  _HomePageState createState() => _HomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
@@ -29,7 +30,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     ref.read(playerProvider.notifier).dispose();
     super.dispose();
   }
@@ -52,7 +52,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               },
             ),
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(text: 'Songs'),
               Tab(text: 'Artist'),
@@ -64,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             unselectedLabelColor: AppColors.grey,
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             SongsList(),
             ArtistList(),
@@ -72,44 +72,52 @@ class _HomePageState extends ConsumerState<HomePage> {
             FolderList(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 12,
-          unselectedItemColor: AppColors.grey,
-          onTap: changeTab,
-          items: [
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/home_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/home.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/heart_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/heart.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Favorites',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/playlist_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/playlist.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Playlists',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/settings_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/settings.svg',
-                color: AppColors.grey,
-              ),
-              label: "Settings",
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MiniMusicPlayer(),
+            BottomNavigationBar(
+              currentIndex: currentIndex,
+              type: BottomNavigationBarType.fixed,
+              selectedFontSize: 12,
+              unselectedItemColor: AppColors.grey,
+              onTap: changeTab,
+              items: [
+                BottomNavigationBarItem(
+                  activeIcon: SvgPicture.asset('assets/images/home_fill.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/images/home.svg',
+                    color: AppColors.grey,
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: SvgPicture.asset('assets/images/heart_fill.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/images/heart.svg',
+                    color: AppColors.grey,
+                  ),
+                  label: 'Favorites',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon:
+                      SvgPicture.asset('assets/images/playlist_fill.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/images/playlist.svg',
+                    color: AppColors.grey,
+                  ),
+                  label: 'Playlists',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon:
+                      SvgPicture.asset('assets/images/settings_fill.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/images/settings.svg',
+                    color: AppColors.grey,
+                  ),
+                  label: "Settings",
+                ),
+              ],
             ),
           ],
         ),

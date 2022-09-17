@@ -25,6 +25,10 @@ class AudioQueryService {
     return await _audioQuery.querySongs();
   }
 
+  Future<List<SongModel>> getaSongs() async {
+    return await _audioQuery.querySongs();
+  }
+
   Future<List<AlbumModel>> getAlbums() async {
     return await _audioQuery.queryAlbums();
   }
@@ -59,13 +63,7 @@ class AudioQueryService {
   }
 
   Future<List<SongModel>> getFolderSongs(String path) async {
-    print(path);
-    var val = await _audioQuery.queryFromFolder(path).whenComplete(() {
-      print("getting folder song completed");
-    }).catchError((error) {
-      debugPrint(error.toString());
-    });
-    debugPrint(val.toString());
+    var val = await _audioQuery.querySongs(path: path);
     return val;
   }
 }

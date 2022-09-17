@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/app/global_provider.dart';
 
 import 'package:humm/src/services/shared_preferences.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 
 import 'src/app.dart';
@@ -18,6 +20,12 @@ void main() async {
 
 Future<void> initializeApp() async {
   await UserPreferences.init();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+    androidNotificationIcon: 'drawable/icon',
+  );
   final cont = ProviderContainer();
   await cont.read(audioQueryProvider).requestPermission();
   await OnAudioRoom().initRoom();
