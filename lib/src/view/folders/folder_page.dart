@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:humm/src/view/songs/songs_list.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/global_provider.dart';
@@ -49,28 +48,67 @@ class FolderSongsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final res = ref.watch(folderSongProvider(path));
     return res.when(
-        data: (data) {
-          if (data.isNotEmpty) {
+        data: (songsList) {
+          if (songsList.isNotEmpty) {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () async {
                     final player = ref.read(playerProvider);
+                    final queueHashcode = ref.read(queueHashcodeProvider);
 
-                    await ref
-                        .read(playlistController.notifier)
-                        .addSong(data[index]);
-                    await player.seek(Duration.zero, index: index);
-                    if (!player.playing) {
-                      player.play();
+                    if (queueHashcode == null) {
+                      print("initialising source");
+
+                      await ref
+                          .read(playlistController.notifier)
+                          .setQueue(songsList);
+
+                      ref.read(queueHashcodeProvider.state).state =
+                          songsList.hashCode;
+
+                      await player.seek(Duration.zero, index: index);
+
+                      ref.read(musicQueuedProvider.state).state = true;
+
+                      await player.play();
+                    } else {
+                      if (queueHashcode != songsList.hashCode) {
+                        print("changing source");
+                        await ref
+                            .read(playlistController.notifier)
+                            .clearPlaylist();
+
+                        await ref
+                            .read(playlistController.notifier)
+                            .setQueue(songsList);
+
+                        ref.read(queueHashcodeProvider.state).state =
+                            songsList.hashCode;
+
+                        await player.seek(Duration.zero, index: index);
+
+                        ref.read(musicQueuedProvider.state).state = true;
+
+                        if (!player.playing) {
+                          await player.play();
+                        }
+                      } else {
+                        print(" source exisit");
+
+                        await player.seek(Duration.zero, index: index);
+                        if (!player.playing) {
+                          await player.play();
+                        }
+                      }
                     }
                   },
                   child: MusicTile(
-                    song: data[index],
+                    song: songsList[index],
                   ),
                 );
               },
-              itemCount: data.length,
+              itemCount: songsList.length,
             );
           } else {
             return const Center(child: Text("Permission not Granted !"));

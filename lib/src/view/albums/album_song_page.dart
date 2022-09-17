@@ -44,13 +44,49 @@ class AlbumSongsList extends ConsumerWidget {
           return InkWell(
             onTap: () async {
               final player = ref.read(playerProvider);
+              final queueHashcode = ref.read(queueHashcodeProvider);
+              print("$queueHashcode ,${songsList.hashCode}");
 
-              await ref
-                  .read(playlistController.notifier)
-                  .addSong(songsList[index]);
-              await player.seek(Duration.zero, index: index);
-              if (!player.playing) {
-                player.play();
+              if (queueHashcode == null) {
+                print("initialising source");
+
+                await ref.read(playlistController.notifier).setQueue(songsList);
+
+                ref.read(queueHashcodeProvider.state).state =
+                    songsList.hashCode;
+
+                await player.seek(Duration.zero, index: index);
+
+                ref.read(musicQueuedProvider.state).state = true;
+
+                await player.play();
+              } else {
+                if (queueHashcode != songsList.hashCode) {
+                  print("changing source");
+                  await ref.read(playlistController.notifier).clearPlaylist();
+
+                  await ref
+                      .read(playlistController.notifier)
+                      .setQueue(songsList);
+
+                  ref.read(queueHashcodeProvider.state).state =
+                      songsList.hashCode;
+
+                  await player.seek(Duration.zero, index: index);
+
+                  ref.read(musicQueuedProvider.state).state = true;
+
+                  if (!player.playing) {
+                    await player.play();
+                  }
+                } else {
+                  print(" source exisit");
+
+                  await player.seek(Duration.zero, index: index);
+                  if (!player.playing) {
+                    await player.play();
+                  }
+                }
               }
             },
             child: MusicTile(

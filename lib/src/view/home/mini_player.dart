@@ -5,10 +5,8 @@ import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/view/songs/song_page.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/colors.dart';
-import '../../services/music_player_service.dart';
 import '../songs/music_tile.dart';
 
 class MiniMusicPlayer extends ConsumerWidget {
@@ -17,10 +15,11 @@ class MiniMusicPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final res = ref.watch(metaDataProvider);
+    final queued = ref.watch(musicQueuedProvider);
 
     return res.when(
       data: (state) {
-        if (state?.sequence.isEmpty ?? true) {
+        if ((state?.sequence.isEmpty ?? true) || !queued) {
           return const SizedBox();
         }
         final metadata = state!.currentSource!.tag as MediaItem;

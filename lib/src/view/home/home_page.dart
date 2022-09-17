@@ -30,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void dispose() {
-    ref.read(playerProvider.notifier).dispose();
+    ref.read(playerProvider).dispose();
     super.dispose();
   }
 

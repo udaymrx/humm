@@ -6,14 +6,11 @@ import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
 
-import '../controllers/music_player_controler.dart';
 import '../controllers/playlist_controller.dart';
 import '../data/model/posistion_model.dart';
 
 import '../controllers/settings_controller.dart';
 import '../services/audio_service.dart';
-
-enum MusicDataState { loading, loaded }
 
 final themeController =
     StateNotifierProvider<AppThemeNotifier, ThemeMode>((ref) {
@@ -24,18 +21,22 @@ final audioQueryProvider = Provider<AudioQueryService>((ref) {
   return AudioQueryService();
 });
 
-final playerProvider = StateNotifierProvider<MusicNotifier, AudioPlayer>((ref) {
-  return MusicNotifier(ref.read);
+final playerProvider = StateProvider<AudioPlayer>((ref) {
+  return AudioPlayer();
 });
 
 final playlistController =
     StateNotifierProvider<PlaylistController, ConcatenatingAudioSource>((ref) {
-  return PlaylistController();
+  return PlaylistController(ref.read);
 });
 
-// final musicLoadedProvider = StateProvider<MusicDataState>((ref) {
-//   return MusicDataState.loading;
-// });
+final musicQueuedProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+final queueHashcodeProvider = StateProvider<int?>((ref) {
+  return null;
+});
 
 final allSongProvider =
     StateNotifierProvider<SongListNotifier, AsyncValue<List<SongModel>>>((ref) {

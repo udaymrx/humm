@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/view/songs/music_tile.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 
 class SongsList extends StatefulWidget {
   const SongsList({super.key});
@@ -24,68 +23,73 @@ class _SongsListState extends State<SongsList> {
         });
 
         return res.when(
-          data: (data) {
-            if (data.isNotEmpty) {
+          data: (songsList) {
+            if (songsList.isNotEmpty) {
               return ListView.builder(
                 itemBuilder: (cnxt, index) {
                   return InkWell(
                     onTap: () async {
                       final player = ref.read(playerProvider);
+                      final queueHashcode = ref.read(queueHashcodeProvider);
+                      print("hash:: $queueHashcode ,${songsList.hashCode}");
 
-                      await ref
-                          .read(playlistController.notifier)
-                          .addSong(data[index]);
-                      await player.seek(Duration.zero, index: index);
-                      if (!player.playing) {
-                        player.play();
+                      if (queueHashcode == null) {
+                        print("initialising source");
+
+                        await ref
+                            .read(playlistController.notifier)
+                            .setQueue(songsList);
+
+                        ref.read(queueHashcodeProvider.state).state =
+                            songsList.hashCode;
+
+                        print("avail indices: ${player.effectiveIndices}");
+                        print("seeking to $index");
+
+                        await player.seek(Duration.zero, index: index);
+
+                        print("seeked to $index");
+
+                        ref.read(musicQueuedProvider.state).state = true;
+
+                        await player.play();
+                      } else {
+                        if (queueHashcode != songsList.hashCode) {
+                          print("changing source");
+                          await ref
+                              .read(playlistController.notifier)
+                              .clearPlaylist();
+
+                          await ref
+                              .read(playlistController.notifier)
+                              .setQueue(songsList);
+
+                          ref.read(queueHashcodeProvider.state).state =
+                              songsList.hashCode;
+
+                          await player.seek(Duration.zero, index: index);
+
+                          ref.read(musicQueuedProvider.state).state = true;
+
+                          if (!player.playing) {
+                            await player.play();
+                          }
+                        } else {
+                          print(" source exisit");
+
+                          await player.seek(Duration.zero, index: index);
+                          if (!player.playing) {
+                            await player.play();
+                          }
+                        }
                       }
-                      // if (player.audioSource!.sequence.isEmpty) {
-                      //   // add sources
-                      //   print("initialising source");
-                      //   var newlist = data.skip(index).toList();
-                      //   await ref
-                      //       .read(playlistController.notifier)
-                      //       .addPlaylist(newlist);
-                      //   await player.play();
-                      // } else {
-                      //   // not added song
-                      //   print(" source exisit");
-                      //   print("avil indices:  ${player.effectiveIndices}");
-                      //   print(
-                      //       "contains: ${player.effectiveIndices?.contains(index)}");
-
-                      //   final val = player.sequenceState?.currentSource?.tag
-                      //       as MediaItem;
-                      //   val.title == data[index].displayNameWOExt;
-
-                      //   if (!(player.effectiveIndices?.contains(index) ??
-                      //       false)) {
-                      //     print(" song not added");
-
-                      //     await ref
-                      //         .read(playlistController.notifier)
-                      //         .addSong(data[index]);
-                      //     await player.seek(Duration.zero, index: index);
-                      //     if (!player.playing) {
-                      //       player.play();
-                      //     }
-                      //   } else {
-                      //     print(" replying song");
-
-                      //     // already added song
-                      //     await player.seek(Duration.zero, index: index);
-                      //     if (!player.playing) {
-                      //       player.play();
-                      //     }
-                      //   }
-                      // }
                     },
                     child: MusicTile(
-                      song: data[index],
+                      song: songsList[index],
                     ),
                   );
                 },
-                itemCount: data.length,
+                itemCount: songsList.length,
               );
             } else {
               return const Center(child: Text("Permission not Granted !"));
