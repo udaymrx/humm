@@ -3,6 +3,7 @@ import 'package:humm/src/view/albums/album_song_page.dart';
 import 'package:humm/src/view/artists/artist_song_page.dart';
 import 'package:humm/src/view/folders/folder_page.dart';
 import 'package:humm/src/view/home/home_page.dart';
+import 'package:humm/src/view/main/main_page.dart';
 import 'package:humm/src/view/songs/song_page.dart';
 import '../view/settings/settings_page.dart';
 
@@ -13,10 +14,8 @@ class RouterNav {
     // Uncomment below line to use page arguments.
     final args = routeSettings.arguments;
     switch (routeSettings.name) {
-      case HomePage.routeName:
-        return MaterialPageRoute(builder: (_) => const HomePage());
-      case SettingsPage.routeName:
-        return MaterialPageRoute(builder: (_) => const SettingsPage());
+      case MainPage.routeName:
+        return MaterialPageRoute(builder: (_) => const MainPage());
       case SongPage.routeName:
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>

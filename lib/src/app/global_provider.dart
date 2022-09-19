@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humm/src/controllers/favorite_list_controller.dart';
 import 'package:humm/src/controllers/song_list_controller.dart';
+import 'package:humm/src/services/room_service.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_room/on_audio_room.dart';
 
 import '../controllers/playlist_controller.dart';
 import '../data/model/posistion_model.dart';
@@ -19,6 +22,15 @@ final themeController =
 
 final audioQueryProvider = Provider<AudioQueryService>((ref) {
   return AudioQueryService();
+});
+
+final roomProvider = Provider<RoomService>((ref) {
+  return RoomService();
+});
+
+final favoriteSongProvider =
+    StateNotifierProvider<FavoutiteSongListNotifier, AsyncValue<List<FavoritesEntity>>>((ref) {
+  return FavoutiteSongListNotifier(ref.read);
 });
 
 final playerProvider = StateProvider<AudioPlayer>((ref) {

@@ -10,8 +10,6 @@ import '../../app/global_provider.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
-  static const routeName = '/settings';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

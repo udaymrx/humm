@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/theme.dart';
-import 'package:humm/src/view/home/home_page.dart';
+import 'package:humm/src/view/main/main_page.dart';
 
 import 'app/global_provider.dart';
 import 'app/routes.dart';
@@ -61,7 +61,7 @@ class MyApp extends ConsumerWidget {
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
-          initialRoute: HomePage.routeName,
+          initialRoute: MainPage.routeName,
           onGenerateRoute: RouterNav.generateRoute,
         );
       },
