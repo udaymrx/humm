@@ -78,7 +78,7 @@ class AlbumTile extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {},
-                  child: Icon(Icons.more_vert),
+                  child: const Icon(Icons.more_vert),
                 ),
               ],
             ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/view/artists/artist_tile.dart';
-import 'package:humm/src/view/songs/music_tile.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/global_provider.dart';
-import '../songs/songs_list.dart';
 
 final artistsProvider = FutureProvider<List<ArtistModel>>((ref) async {
   final audioService = ref.read(audioQueryProvider);

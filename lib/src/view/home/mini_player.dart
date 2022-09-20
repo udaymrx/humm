@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/view/songs/song_page.dart';
 import 'package:just_audio/just_audio.dart';

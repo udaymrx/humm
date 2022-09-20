@@ -34,7 +34,7 @@ class ArtistTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      leading: CircleAvatar(
+      leading: const CircleAvatar(
         radius: 35,
         child: Icon(
           Icons.person,
@@ -43,7 +43,7 @@ class ArtistTile extends StatelessWidget {
       ),
       trailing: IconButton(
         onPressed: () {},
-        icon: Icon(Icons.more_vert),
+        icon: const Icon(Icons.more_vert),
       ),
     );
   }

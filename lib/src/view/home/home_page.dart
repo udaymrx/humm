@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/view/albums/album_list.dart';
 import 'package:humm/src/view/artists/artist_list.dart';
 import 'package:humm/src/view/folders/folder_list.dart';
-import 'package:humm/src/view/home/mini_player.dart';
 import 'package:humm/src/view/songs/songs_list.dart';
 
-import '../../app/global_provider.dart';
-import '../settings/settings_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

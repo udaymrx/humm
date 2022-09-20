@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:humm/src/app/colors.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:humm/src/app/global_provider.dart';
+import 'package:humm/src/data/model/music_model.dart';
+import 'package:humm/src/data/model/playlist_info_model.dart';
 
 import 'package:humm/src/services/shared_preferences.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -28,5 +30,8 @@ Future<void> initializeApp() async {
   );
   final cont = ProviderContainer();
   await cont.read(audioQueryProvider).requestPermission();
-  await OnAudioRoom().initRoom();
+  await Hive.initFlutter();
+  Hive.registerAdapter(MusicModelAdapter());
+  Hive.registerAdapter(PlaylistInfoModelAdapter());
+  cont.read(favoriteBoxProvider).openFavoriteBox();
 }

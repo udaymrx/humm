@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/app/global_provider.dart';
-import 'package:humm/src/view/songs/song_page.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+import 'package:humm/src/data/model/music_model.dart';
 
 final songArtProvider = FutureProvider.family<Uint8List?, int>((ref, id) async {
   return ref.read(audioQueryProvider).getSongArt(id);
@@ -14,7 +13,7 @@ final songArtProvider = FutureProvider.family<Uint8List?, int>((ref, id) async {
 class MusicTile extends StatelessWidget {
   const MusicTile({super.key, required this.song});
 
-  final SongModel song;
+  final MusicModel song;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +107,61 @@ class MusicTile extends StatelessWidget {
               ],
             ),
           ),
+          Consumer(builder: (context, ref, child) {
+            final val = ref.watch(isFavoriteProvider(song.id));
+            return val.when(
+              data: (isFavorite) {
+                return IconButton(
+                  onPressed: () async {
+                    if (isFavorite) {
+                      await ref
+                          .read(favoriteBoxProvider)
+                          .removeFavorite(song.id);
+                      ref.invalidate(favoriteSongProvider);
+                      ref.invalidate(isFavoriteProvider(song.id));
+                      // ref
+                      //     .read(allSongProvider.notifier)
+                      //     .disableFavorite(song.id);
+                    } else {
+                      await ref
+                          .read(favoriteBoxProvider)
+                          .addFavorite(song.copyWith(isFavorite: true));
+                      ref.invalidate(favoriteSongProvider);
+                      ref.invalidate(isFavoriteProvider(song.id));
+                      // ref
+                      //     .read(allSongProvider.notifier)
+                      //     .enableFavorite(song.id);
+                    }
+                  },
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+                  ),
+                );
+              },
+              error: (error, st) => Text(error.toString()),
+              loading: () => const Icon(
+                Icons.favorite_border_rounded,
+              ),
+            );
+            // return IconButton(
+            //   onPressed: () async {
+            //     if (isFavorite) {
+            //       await ref.read(favoriteBoxProvider).removeFavorite(song.id);
+            //       ref.invalidate(favoriteSongProvider);
+            //       ref.read(allSongProvider.notifier).disableFavorite(song.id);
+            //     } else {
+            //       await ref
+            //           .read(favoriteBoxProvider)
+            //           .addFavorite(song.copyWith(isFavorite: true));
+            //       ref.invalidate(favoriteSongProvider);
+            //       ref.read(allSongProvider.notifier).enableFavorite(song.id);
+            //     }
+            //   },
+            //   icon: Icon(
+            //     isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+            //   ),
+            // );
+          }),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_vert),

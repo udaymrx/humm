@@ -8,40 +8,55 @@ class RoomService {
     await _audioRoom.initRoom();
   }
 
-
   ///Playlist
   ///
   Future<int?> createPlaylist(String name) async {
     return await _audioRoom.createPlaylist(name);
   }
 
-  Future<int?> addToPlaylist(SongModel song) async {
+  Future<int?> addToPlaylist(
+      {required SongModel song, required int playlistKey}) async {
     return await _audioRoom.addTo(
       RoomType.PLAYLIST,
+      playlistKey: playlistKey,
       song.getMap.toFavoritesEntity(),
     );
   }
 
-  Future<List<int>> addAllToPlaylist(List<SongModel> songs) async {
+  Future<List<int>> addAllToPlaylist(
+      {required List<SongModel> songs, required int playlistKey}) async {
     List<dynamic> entities = [];
     for (var song in songs) {
       entities.add(song.getMap.toFavoritesEntity());
     }
-    return await _audioRoom.addAllTo(RoomType.PLAYLIST, entities);
+    return await _audioRoom.addAllTo(
+      RoomType.PLAYLIST,
+      playlistKey: playlistKey,
+      entities,
+    );
   }
 
-  Future<bool> removeFromPlaylist(int entityKey) async {
-    return await _audioRoom.deleteFrom(RoomType.PLAYLIST, entityKey);
+  Future<bool> removeFromPlaylist(
+      {required int entityKey, required int playlistKey}) async {
+    return await _audioRoom.deleteFrom(
+      RoomType.PLAYLIST,
+      playlistKey: playlistKey,
+      entityKey,
+    );
   }
 
-  Future<bool> clearPlaylist(List<int> keys) async {
-    return await _audioRoom.deleteAllFrom(RoomType.PLAYLIST, keys);
+  Future<bool> clearPlaylist(
+      {required List<int> keys, required int playlistKey}) async {
+    return await _audioRoom.deleteAllFrom(
+      RoomType.PLAYLIST,
+      playlistKey: playlistKey,
+      keys,
+    );
   }
 
   Future<bool> deletePlaylist(int key) async {
     return await _audioRoom.deletePlaylist(key);
   }
-
 
   ///Favourites
   ///

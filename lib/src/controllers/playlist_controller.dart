@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
+import 'package:humm/src/data/model/music_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class PlaylistController extends StateNotifier<ConcatenatingAudioSource> {
   PlaylistController(this._reader)
@@ -10,7 +10,7 @@ class PlaylistController extends StateNotifier<ConcatenatingAudioSource> {
 
   final Reader _reader;
 
-  Future<void> setQueue(List<SongModel> songsList) async {
+  Future<void> setQueue(List<MusicModel> songsList) async {
     List<AudioSource> songs = [];
     for (var song in songsList) {
       final s = AudioSource.uri(

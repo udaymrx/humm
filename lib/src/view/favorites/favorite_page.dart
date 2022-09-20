@@ -9,7 +9,10 @@ class FavoritePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(appBar: AppBar(title: Text("Favorite")),);
+    return Scaffold(
+      appBar: AppBar(title: const Text("Favorite")),
+      body: FavoriteList(),
+    );
   }
 }
 
@@ -94,15 +97,15 @@ class _FavoriteListState extends State<FavoriteList> {
                       //   }
                       // }
                     },
-                    // child: MusicTile(
-                    //   song: songsList[index].,
-                    // ),
+                    child: MusicTile(
+                      song: songsList[index],
+                    ),
                   );
                 },
                 itemCount: songsList.length,
               );
             } else {
-              return const Center(child: Text("Permission not Granted !"));
+              return const Center(child: Text("No Favorite Songs"));
             }
           },
           error: (error, st) => Center(child: Text(error.toString())),

@@ -22,7 +22,7 @@ class AlbumPage extends ConsumerWidget {
         onPressed: () {
           // final lst = ref.read(albumFilterSongProvider(album));
         },
-        child: Icon(
+        child: const Icon(
           Icons.play_arrow_rounded,
         ),
       ),

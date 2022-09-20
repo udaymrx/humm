@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:humm/src/view/albums/album_song_page.dart';
 import 'package:humm/src/view/artists/artist_song_page.dart';
 import 'package:humm/src/view/folders/folder_page.dart';
-import 'package:humm/src/view/home/home_page.dart';
 import 'package:humm/src/view/main/main_page.dart';
 import 'package:humm/src/view/songs/song_page.dart';
-import '../view/settings/settings_page.dart';
 
 class RouterNav {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
