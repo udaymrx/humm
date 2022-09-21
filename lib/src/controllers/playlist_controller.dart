@@ -21,7 +21,7 @@ class PlaylistController extends StateNotifier<ConcatenatingAudioSource> {
           // Metadata to display in the notification:
           album: song.album,
           artist: song.artist ?? "Unknown Artist",
-          title: song.displayNameWOExt,
+          title: song.title,
           // artUri: Uri.parse('https://example.com/albumart.jpg'),
         ),
       );

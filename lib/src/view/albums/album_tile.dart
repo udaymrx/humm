@@ -89,7 +89,9 @@ class AlbumTile extends StatelessWidget {
               children: [
                 Flexible(
                     child: Text(
-                  album.artist.toString(),
+                  album.artist == "<unknown>"
+                      ? "Unknown Artist"
+                      : album.artist!,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,

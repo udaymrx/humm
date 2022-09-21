@@ -12,11 +12,12 @@ class ArtistTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-       onTap: () {
-        Navigator.pushNamed(context, ArtistPage.routeName,arguments: artist.artist);
+      onTap: () {
+        Navigator.pushNamed(context, ArtistPage.routeName,
+            arguments: artist.artist);
       },
       title: Text(
-        artist.artist,
+        artist.artist == "<unknown>" ? "Unknown Artist" : artist.artist,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,

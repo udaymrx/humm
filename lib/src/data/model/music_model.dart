@@ -120,12 +120,13 @@ class MusicModel {
         title: json["title"],
         album: json["album"],
         albumId: json["album_id"],
-        artist: json["artist"],
+        artist:
+            json["artist"] == "<unknown>" ? "Unknown Artist" : json["artist"],
         artistId: json["artist_id"],
         duration: json["duration"],
         uri: json["_uri"],
         fileExtension: json["file_extension"],
-        isFavorite: json["isFavorite"]??false,
+        isFavorite: json["isFavorite"] ?? false,
       );
 
   @override

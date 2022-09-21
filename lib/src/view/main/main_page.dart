@@ -34,6 +34,11 @@ class _MainPageState extends ConsumerState<MainPage> {
     setState(() {});
   }
 
+  void changeTabIndex(int index) {
+    currentIndex = index;
+    setState(() {});
+  }
+
   @override
   void dispose() {
     ref.read(playerProvider).dispose();
@@ -45,6 +50,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
+        onPageChanged: changeTabIndex,
         children: const [
           HomePage(),
           FavoritePage(),
