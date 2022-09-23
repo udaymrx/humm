@@ -15,6 +15,7 @@ String musicToJson(List<MusicModel> data) =>
 class MusicModel {
   const MusicModel({
     required this.id,
+    required this.data,
     this.uri,
     required this.displayName,
     required this.displayNameWOExt,
@@ -64,8 +65,12 @@ class MusicModel {
   @HiveField(11)
   final bool isFavorite;
 
+  @HiveField(12)
+  final String data;
+
   MusicModel copyWith({
     int? id,
+    String? data,
     String? uri,
     String? displayName,
     String? displayNameWOExt,
@@ -80,6 +85,7 @@ class MusicModel {
   }) {
     return MusicModel(
       id: id ?? this.id,
+      data: data ?? this.data,
       uri: uri ?? this.uri,
       displayName: displayName ?? this.displayName,
       displayNameWOExt: displayNameWOExt ?? this.displayNameWOExt,
@@ -97,6 +103,7 @@ class MusicModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       '_id': id,
+      '_data': data,
       '_uri': uri,
       '_display_name': displayName,
       '_display_name_wo_ext': displayNameWOExt,
@@ -116,6 +123,7 @@ class MusicModel {
   factory MusicModel.fromJson(Map<String, dynamic> json) => MusicModel(
         id: json["_id"],
         displayName: json["_display_name"],
+        data: json["_data"],
         displayNameWOExt: json["_display_name_wo_ext"],
         title: json["title"],
         album: json["album"],
@@ -131,7 +139,7 @@ class MusicModel {
 
   @override
   String toString() {
-    return 'MusicModel(id: $id, uri: $uri, displayName: $displayName, displayNameWOExt: $displayNameWOExt, album: $album, albumId: $albumId, artist: $artist, artistId: $artistId, duration: $duration, title: $title, fileExtension: $fileExtension, isFavorite: $isFavorite)';
+    return 'MusicModel(id: $id, data: $data, uri: $uri, displayName: $displayName, displayNameWOExt: $displayNameWOExt, album: $album, albumId: $albumId, artist: $artist, artistId: $artistId, duration: $duration, title: $title, fileExtension: $fileExtension, isFavorite: $isFavorite)';
   }
 
   @override
@@ -140,6 +148,7 @@ class MusicModel {
 
     return other.id == id &&
         other.uri == uri &&
+        other.data == data &&
         other.displayName == displayName &&
         other.displayNameWOExt == displayNameWOExt &&
         other.album == album &&
@@ -156,6 +165,7 @@ class MusicModel {
   int get hashCode {
     return id.hashCode ^
         uri.hashCode ^
+        data.hashCode ^
         displayName.hashCode ^
         displayNameWOExt.hashCode ^
         album.hashCode ^

@@ -6,7 +6,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 import '../../app/colors.dart';
-import '../songs/music_tile.dart';
 
 class MiniMusicPlayer extends ConsumerWidget {
   const MiniMusicPlayer({Key? key}) : super(key: key);
@@ -22,10 +21,15 @@ class MiniMusicPlayer extends ConsumerWidget {
           return const SizedBox();
         }
         final metadata = state!.currentSource!.tag as MediaItem;
-        return InkWell(
+        return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, SongPage.routeName);
           },
+          onVerticalDragDown: (details) {},
+          onVerticalDragStart: (details) {},
+          onVerticalDragUpdate: (details) {},
+          onVerticalDragEnd: (details) {},
+          onVerticalDragCancel: () {},
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(

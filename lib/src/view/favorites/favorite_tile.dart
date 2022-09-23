@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/app/global_provider.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+import 'package:on_audio_room/on_audio_room.dart';
 
-import '../../utils/playlists_bottom_sheet.dart';
+class FavoriteTile extends StatelessWidget {
+  const FavoriteTile({super.key, required this.song});
 
-class MusicTile extends StatelessWidget {
-  const MusicTile({super.key, required this.song});
-
-  final SongModel song;
+  final FavoritesEntity song;
 
   @override
   Widget build(BuildContext context) {
@@ -114,9 +112,11 @@ class MusicTile extends StatelessWidget {
                       ref.invalidate(favoriteSongProvider);
                       ref.invalidate(isFavoriteProvider(song.id));
                     } else {
-                      await ref.read(roomProvider).addToFavourite(song);
-                      ref.invalidate(favoriteSongProvider);
-                      ref.invalidate(isFavoriteProvider(song.id));
+                      // await ref
+                      //     .read(roomProvider)
+                      //     .addToFavourite(song);
+                      // ref.invalidate(favoriteSongProvider);
+                      // ref.invalidate(isFavoriteProvider(song.id));
                     }
                   },
                   icon: Icon(
@@ -129,17 +129,33 @@ class MusicTile extends StatelessWidget {
                 Icons.favorite_border_rounded,
               ),
             );
+            // return IconButton(
+            //   onPressed: () async {
+            //     if (isFavorite) {
+            //       await ref.read(favoriteBoxProvider).removeFavorite(song.id);
+            //       ref.invalidate(favoriteSongProvider);
+            //       ref.read(allSongProvider.notifier).disableFavorite(song.id);
+            //     } else {
+            //       await ref
+            //           .read(favoriteBoxProvider)
+            //           .addFavorite(song.copyWith(isFavorite: true));
+            //       ref.invalidate(favoriteSongProvider);
+            //       ref.read(allSongProvider.notifier).enableFavorite(song.id);
+            //     }
+            //   },
+            //   icon: Icon(
+            //     isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+            //   ),
+            // );
           }),
           Consumer(builder: (context, ref, child) {
             return IconButton(
               onPressed: () async {
-                final key = await openBottomSheet(context);
-                if (key != null) {
-                  await ref
-                      .read(roomProvider)
-                      .addToPlaylist(song: song, playlistKey: key);
-                  ref.invalidate(listOfPlaylistProvider);
-                }
+                // await ref
+                //     .read(roomProvider)
+                //     .addToPlaylist(song: song, playlistKey: 72169555);
+                // ref.invalidate(rawPlaylist3Provider);
+                // print('ho gaya');
               },
               icon: const Icon(Icons.more_vert),
             );

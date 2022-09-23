@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
+import 'package:humm/src/view/favorites/favorite_tile.dart';
 
-import '../songs/music_tile.dart';
 
 class FavoritePage extends ConsumerWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -42,62 +42,62 @@ class _FavoriteListState extends State<FavoriteList> {
                 itemBuilder: (cnxt, index) {
                   return InkWell(
                     onTap: () async {
-                      // final player = ref.read(playerProvider);
-                      // final queueHashcode = ref.read(queueHashcodeProvider);
-                      // print("hash:: $queueHashcode ,${songsList.hashCode}");
+                      final player = ref.read(playerProvider);
+                      final queueHashcode = ref.read(queueHashcodeProvider);
+                      print("hash:: $queueHashcode ,${songsList.hashCode}");
 
-                      // if (queueHashcode == null) {
-                      //   print("initialising source");
+                      if (queueHashcode == null) {
+                        print("initialising source");
 
-                      //   await ref
-                      //       .read(playlistController.notifier)
-                      //       .setQueue(songsList);
+                        await ref
+                            .read(queueController.notifier)
+                            .setFavoriteQueue(songsList);
 
-                      //   ref.read(queueHashcodeProvider.state).state =
-                      //       songsList.hashCode;
+                        ref.read(queueHashcodeProvider.state).state =
+                            songsList.hashCode;
 
-                      //   print("avail indices: ${player.effectiveIndices}");
-                      //   print("seeking to $index");
+                        print("avail indices: ${player.effectiveIndices}");
+                        print("seeking to $index");
 
-                      //   await player.seek(Duration.zero, index: index);
+                        await player.seek(Duration.zero, index: index);
 
-                      //   print("seeked to $index");
+                        print("seeked to $index");
 
-                      //   ref.read(musicQueuedProvider.state).state = true;
+                        ref.read(musicQueuedProvider.state).state = true;
 
-                      //   await player.play();
-                      // } else {
-                      //   if (queueHashcode != songsList.hashCode) {
-                      //     print("changing source");
-                      //     await ref
-                      //         .read(playlistController.notifier)
-                      //         .clearPlaylist();
+                        await player.play();
+                      } else {
+                        if (queueHashcode != songsList.hashCode) {
+                          print("changing source");
+                          await ref
+                              .read(queueController.notifier)
+                              .clearPlaylist();
 
-                      //     await ref
-                      //         .read(playlistController.notifier)
-                      //         .setQueue(songsList);
+                          await ref
+                              .read(queueController.notifier)
+                              .setFavoriteQueue(songsList);
 
-                      //     ref.read(queueHashcodeProvider.state).state =
-                      //         songsList.hashCode;
+                          ref.read(queueHashcodeProvider.state).state =
+                              songsList.hashCode;
 
-                      //     await player.seek(Duration.zero, index: index);
+                          await player.seek(Duration.zero, index: index);
 
-                      //     ref.read(musicQueuedProvider.state).state = true;
+                          ref.read(musicQueuedProvider.state).state = true;
 
-                      //     if (!player.playing) {
-                      //       await player.play();
-                      //     }
-                      //   } else {
-                      //     print(" source exisit");
+                          if (!player.playing) {
+                            await player.play();
+                          }
+                        } else {
+                          print(" source exisit");
 
-                      //     await player.seek(Duration.zero, index: index);
-                      //     if (!player.playing) {
-                      //       await player.play();
-                      //     }
-                      //   }
-                      // }
+                          await player.seek(Duration.zero, index: index);
+                          if (!player.playing) {
+                            await player.play();
+                          }
+                        }
+                      }
                     },
-                    child: MusicTile(
+                    child: FavoriteTile(
                       song: songsList[index],
                     ),
                   );

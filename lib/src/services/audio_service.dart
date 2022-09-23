@@ -22,7 +22,9 @@ class AudioQueryService {
   }
 
   Future<List<SongModel>> getSongs() async {
-    return await _audioQuery.querySongs();
+    return await _audioQuery.querySongs(
+      sortType: SongSortType.TITLE,
+    );
   }
 
   Future<List<SongModel>> getaSongs() async {

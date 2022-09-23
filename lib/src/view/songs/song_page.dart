@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 import '../../app/global_provider.dart';
-import 'music_tile.dart';
 
 class SongPage extends ConsumerWidget {
   const SongPage({Key? key}) : super(key: key);

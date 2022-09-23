@@ -1,16 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/controllers/favorite_list_controller.dart';
+import 'package:humm/src/controllers/playlist_controller.dart';
 import 'package:humm/src/controllers/song_list_controller.dart';
 import 'package:humm/src/data/local/favorite_box.dart';
-import 'package:humm/src/data/model/music_model.dart';
 import 'package:humm/src/services/room_service.dart';
 import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 
-import '../controllers/playlist_controller.dart';
+import '../controllers/add_song_to_playlist_controler.dart';
+import '../controllers/queue_controller.dart';
 import '../data/model/posistion_model.dart';
 
 import '../controllers/settings_controller.dart';
@@ -25,6 +29,10 @@ final audioQueryProvider = Provider<AudioQueryService>((ref) {
   return AudioQueryService();
 });
 
+final songArtProvider = FutureProvider.family<Uint8List?, int>((ref, id) async {
+  return ref.read(audioQueryProvider).getSongArt(id);
+});
+
 final roomProvider = Provider<RoomService>((ref) {
   return RoomService();
 });
@@ -32,26 +40,44 @@ final roomProvider = Provider<RoomService>((ref) {
 final favoriteBoxProvider = Provider<FavoriteBox>((ref) {
   return FavoriteBox();
 });
+
+// final playlistBoxProvider = Provider<PlaylistBox>((ref) {
+//   return PlaylistBox();
+// });
+
 final isFavoriteProvider = FutureProvider.family<bool, int>((ref, id) async {
-  final val = await ref.read(favoriteBoxProvider).favoriteSongsKeys;
-
-  final result = val.any((key) => key == id);
-
+  final result = await ref.read(roomProvider).isSongFavorite(id);
   return result;
 });
 
 final favoriteSongProvider = StateNotifierProvider<FavoutiteSongListNotifier,
-    AsyncValue<List<MusicModel>>>((ref) {
+    AsyncValue<List<FavoritesEntity>>>((ref) {
   return FavoutiteSongListNotifier(ref.read);
+});
+
+final listOfPlaylistProvider =
+    FutureProvider<List<PlaylistEntity>>((ref) async {
+  final result = await ref.read(roomProvider).getPlaylists();
+  return result;
+});
+
+final songsToAddProvider =
+    ChangeNotifierProvider.autoDispose<SongsToAddNotifier>((ref) {
+  return SongsToAddNotifier();
+});
+
+final songsOfPlaylistProvider = StateNotifierProvider.autoDispose.family<
+    PlaylistSongListNotifier, AsyncValue<List<SongEntity>>, int>((ref, key) {
+  return PlaylistSongListNotifier(ref.read, key: key);
 });
 
 final playerProvider = StateProvider<AudioPlayer>((ref) {
   return AudioPlayer();
 });
 
-final playlistController =
-    StateNotifierProvider<PlaylistController, ConcatenatingAudioSource>((ref) {
-  return PlaylistController(ref.read);
+final queueController =
+    StateNotifierProvider<QueueController, ConcatenatingAudioSource>((ref) {
+  return QueueController(ref.read);
 });
 
 final musicQueuedProvider = StateProvider<bool>((ref) {
@@ -63,8 +89,7 @@ final queueHashcodeProvider = StateProvider<int?>((ref) {
 });
 
 final allSongProvider =
-    StateNotifierProvider<SongListNotifier, AsyncValue<List<MusicModel>>>(
-        (ref) {
+    StateNotifierProvider<SongListNotifier, AsyncValue<List<SongModel>>>((ref) {
   return SongListNotifier(ref.read);
 });
 
@@ -129,10 +154,10 @@ final metaDataProvider = StreamProvider<SequenceState?>((ref) {
 });
 
 final artistFilterSongProvider =
-    StateProvider.family<List<MusicModel>, String>((ref, artist) {
+    StateProvider.family<List<SongModel>, String>((ref, artist) {
   final out = ref.watch(allSongProvider);
 
-  List<MusicModel> filteredList = [];
+  List<SongModel> filteredList = [];
 
   out.whenData((list) {
     filteredList = list.where((song) {
@@ -144,10 +169,10 @@ final artistFilterSongProvider =
 });
 
 final albumFilterSongProvider =
-    StateProvider.family<List<MusicModel>, String>((ref, album) {
+    StateProvider.family<List<SongModel>, String>((ref, album) {
   final out = ref.watch(allSongProvider);
 
-  List<MusicModel> filteredList = [];
+  List<SongModel> filteredList = [];
 
   out.whenData((list) {
     filteredList = list.where((song) {

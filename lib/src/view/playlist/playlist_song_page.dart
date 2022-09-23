@@ -1,21 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:humm/src/app/global_provider.dart';
-import 'package:humm/src/view/songs/music_tile.dart';
+import 'package:humm/src/view/playlist/playlist_song_tile.dart';
+import 'package:on_audio_room/on_audio_room.dart';
 
-class SongsList extends StatefulWidget {
-  const SongsList({super.key});
+import '../../app/global_provider.dart';
+
+final playlistInfoProvider =
+    FutureProvider.family<PlaylistEntity?, int>((ref, id) async {
+  final output = await ref.read(roomProvider).getPlaylistInfo(id);
+  return output;
+});
+
+class PlaylistSongPage extends ConsumerWidget {
+  const PlaylistSongPage({Key? key, required this.id}) : super(key: key);
+
+  static const routeName = '/playlist_song';
+
+  final int id;
 
   @override
-  State<SongsList> createState() => _SongsListState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(title: Consumer(builder: (context, ref, child) {
+        final res = ref.watch(playlistInfoProvider(id));
+        return res.when(
+          data: (data) {
+            return data != null ? Text(data.playlistName) : const Text("Unkown Playlist");
+          },
+          error: (error, stackTrace) => const Text("Unkown Playlist"),
+          loading: () => const Text("Loading..."),
+        );
+      })),
+      body: PlaylistSongList(
+        id: id,
+      ),
+    );
+  }
 }
 
-class _SongsListState extends State<SongsList> {
+class PlaylistSongList extends StatefulWidget {
+  const PlaylistSongList({super.key, required this.id});
+
+  final int id;
+
+  @override
+  State<PlaylistSongList> createState() => _PlaylistSongListState();
+}
+
+class _PlaylistSongListState extends State<PlaylistSongList> {
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final res = ref.watch(allSongProvider);
+        final res = ref.watch(songsOfPlaylistProvider(widget.id));
         ref.listen(playerStateProvider, (previous, next) {
           next.whenData((value) {
             debugPrint(value.processingState.name);
@@ -38,7 +75,7 @@ class _SongsListState extends State<SongsList> {
 
                         await ref
                             .read(queueController.notifier)
-                            .setQueue(songsList);
+                            .setPlaylistQueue(songsList);
 
                         ref.read(queueHashcodeProvider.state).state =
                             songsList.hashCode;
@@ -62,7 +99,7 @@ class _SongsListState extends State<SongsList> {
 
                           await ref
                               .read(queueController.notifier)
-                              .setQueue(songsList);
+                              .setPlaylistQueue(songsList);
 
                           ref.read(queueHashcodeProvider.state).state =
                               songsList.hashCode;
@@ -84,7 +121,7 @@ class _SongsListState extends State<SongsList> {
                         }
                       }
                     },
-                    child: MusicTile(
+                    child: PlaylistSongTile(
                       song: songsList[index],
                     ),
                   );
@@ -92,7 +129,7 @@ class _SongsListState extends State<SongsList> {
                 itemCount: songsList.length,
               );
             } else {
-              return const Center(child: Text("Permission not Granted !"));
+              return const Center(child: Text("No Songs in this Playlist"));
             }
           },
           error: (error, st) => Center(child: Text(error.toString())),

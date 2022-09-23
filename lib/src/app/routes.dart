@@ -3,7 +3,10 @@ import 'package:humm/src/view/albums/album_song_page.dart';
 import 'package:humm/src/view/artists/artist_song_page.dart';
 import 'package:humm/src/view/folders/folder_page.dart';
 import 'package:humm/src/view/main/main_page.dart';
+import 'package:humm/src/view/playlist/add_song_page.dart';
 import 'package:humm/src/view/songs/song_page.dart';
+
+import '../view/playlist/playlist_song_page.dart';
 
 class RouterNav {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -39,6 +42,20 @@ class RouterNav {
         if (args is String) {
           return MaterialPageRoute(
             builder: (_) => FolderPage(path: args),
+          );
+        }
+        return _errorRoute(routeSettings.name!);
+      case PlaylistSongPage.routeName:
+        if (args is int) {
+          return MaterialPageRoute(
+            builder: (_) => PlaylistSongPage(id: args),
+          );
+        }
+        return _errorRoute(routeSettings.name!);
+      case AddSongPage.routeName:
+        if (args is int) {
+          return MaterialPageRoute(
+            builder: (_) => AddSongPage(id: args),
           );
         }
         return _errorRoute(routeSettings.name!);

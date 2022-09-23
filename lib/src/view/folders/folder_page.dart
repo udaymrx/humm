@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/global_provider.dart';
-import '../../data/model/music_model.dart';
 import '../songs/music_tile.dart';
 
 final folderSongProvider =
-    FutureProvider.family<List<MusicModel>, String>((ref, path) async {
-  List<MusicModel> musicList = [];
-  final val = await ref.read(audioQueryProvider).getFolderSongs(path);
+    FutureProvider.family<List<SongModel>, String>((ref, path) async {
+  final musicList = await ref.read(audioQueryProvider).getFolderSongs(path);
 
-  for (var element in val) {
-    final music = MusicModel.fromJson(
-        element.getMap.map((key, value) => MapEntry(key, value)));
-    musicList.add(music);
-  }
+  // for (var element in val) {
+  //   final music = MusicModel.fromJson(
+  //       element.getMap.map((key, value) => MapEntry(key, value)));
+  //   musicList.add(music);
+  // }
   return musicList;
 });
 
@@ -69,7 +68,7 @@ class FolderSongsList extends ConsumerWidget {
                       print("initialising source");
 
                       await ref
-                          .read(playlistController.notifier)
+                          .read(queueController.notifier)
                           .setQueue(songsList);
 
                       ref.read(queueHashcodeProvider.state).state =
@@ -84,11 +83,11 @@ class FolderSongsList extends ConsumerWidget {
                       if (queueHashcode != songsList.hashCode) {
                         print("changing source");
                         await ref
-                            .read(playlistController.notifier)
+                            .read(queueController.notifier)
                             .clearPlaylist();
 
                         await ref
-                            .read(playlistController.notifier)
+                            .read(queueController.notifier)
                             .setQueue(songsList);
 
                         ref.read(queueHashcodeProvider.state).state =

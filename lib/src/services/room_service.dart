@@ -1,3 +1,4 @@
+// import 'package:humm/src/data/model/music_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 
@@ -19,15 +20,15 @@ class RoomService {
     return await _audioRoom.addTo(
       RoomType.PLAYLIST,
       playlistKey: playlistKey,
-      song.getMap.toFavoritesEntity(),
+      song.getMap.toSongEntity(),
     );
   }
 
   Future<List<int>> addAllToPlaylist(
       {required List<SongModel> songs, required int playlistKey}) async {
-    List<dynamic> entities = [];
+    List<SongEntity> entities = [];
     for (var song in songs) {
-      entities.add(song.getMap.toFavoritesEntity());
+      entities.add(song.getMap.toSongEntity());
     }
     return await _audioRoom.addAllTo(
       RoomType.PLAYLIST,
@@ -58,6 +59,27 @@ class RoomService {
     return await _audioRoom.deletePlaylist(key);
   }
 
+  Future<bool> deleteAllPlaylist(int key) async {
+    return await _audioRoom.clearPlaylists();
+  }
+
+  Future<List<PlaylistEntity>> getPlaylists() async {
+    return await _audioRoom.queryPlaylists();
+  }
+
+  Future<PlaylistEntity?> getPlaylistInfo(int key) async {
+    return await _audioRoom.queryPlaylist(key);
+  }
+
+  Future<List<SongEntity>> getSongsFormPlaylist(
+    int playlistKey,
+  ) async {
+    return await _audioRoom.queryAllFromPlaylist(
+      playlistKey,
+      sortType: RoomSortType.DATE_ADDED,
+    );
+  }
+
   ///Favourites
   ///
   Future<int?> addToFavourite(SongModel song) async {
@@ -73,5 +95,9 @@ class RoomService {
 
   Future<List<FavoritesEntity>> getFavouriteSongs() async {
     return await _audioRoom.queryFavorites();
+  }
+
+  Future<bool> isSongFavorite(int entityKey) async {
+    return await _audioRoom.checkIn(RoomType.FAVORITES, entityKey);
   }
 }

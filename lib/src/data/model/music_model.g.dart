@@ -18,6 +18,7 @@ class MusicModelAdapter extends TypeAdapter<MusicModel> {
     };
     return MusicModel(
       id: fields[0] as int,
+      data: fields[12] as String,
       uri: fields[1] as String?,
       displayName: fields[2] as String,
       displayNameWOExt: fields[3] as String,
@@ -35,7 +36,7 @@ class MusicModelAdapter extends TypeAdapter<MusicModel> {
   @override
   void write(BinaryWriter writer, MusicModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class MusicModelAdapter extends TypeAdapter<MusicModel> {
       ..writeByte(10)
       ..write(obj.fileExtension)
       ..writeByte(11)
-      ..write(obj.isFavorite);
+      ..write(obj.isFavorite)
+      ..writeByte(12)
+      ..write(obj.data);
   }
 
   @override
