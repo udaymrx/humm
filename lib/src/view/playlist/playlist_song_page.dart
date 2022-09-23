@@ -25,7 +25,9 @@ class PlaylistSongPage extends ConsumerWidget {
         final res = ref.watch(playlistInfoProvider(id));
         return res.when(
           data: (data) {
-            return data != null ? Text(data.playlistName) : const Text("Unkown Playlist");
+            return data != null
+                ? Text(data.playlistName)
+                : const Text("Unkown Playlist");
           },
           error: (error, stackTrace) => const Text("Unkown Playlist"),
           loading: () => const Text("Loading..."),
@@ -93,9 +95,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
                       } else {
                         if (queueHashcode != songsList.hashCode) {
                           print("changing source");
-                          await ref
-                              .read(queueController.notifier)
-                              .clearPlaylist();
+                          await ref.read(queueController.notifier).clearQueue();
 
                           await ref
                               .read(queueController.notifier)

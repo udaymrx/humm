@@ -21,15 +21,34 @@ class MiniMusicPlayer extends ConsumerWidget {
           return const SizedBox();
         }
         final metadata = state!.currentSource!.tag as MediaItem;
+        String? swipeDirection;
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, SongPage.routeName);
           },
-          onVerticalDragDown: (details) {},
-          onVerticalDragStart: (details) {},
-          onVerticalDragUpdate: (details) {},
-          onVerticalDragEnd: (details) {},
-          onVerticalDragCancel: () {},
+          onVerticalDragUpdate: (details) {
+            int sensitivity = 8;
+            if (details.delta.dy > sensitivity) {
+              // Down Swipe
+              swipeDirection = "Down";
+            } else if (details.delta.dy < -sensitivity) {
+              // Up Swipe
+              swipeDirection = "Up";
+            }
+          },
+          onVerticalDragEnd: (details) async {
+            if (swipeDirection == null) {
+              return;
+            }
+            if (swipeDirection == 'Up') {
+              //handle swipe left event
+              Navigator.pushNamed(context, SongPage.routeName);
+            }
+            if (swipeDirection == 'Down') {
+              //handle swipe right event
+              await ref.read(queueController.notifier).clearQueue();
+            }
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(

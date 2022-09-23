@@ -6,8 +6,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 
 class QueueController extends StateNotifier<ConcatenatingAudioSource> {
-  QueueController(this._reader)
-      : super(ConcatenatingAudioSource(children: []));
+  QueueController(this._reader) : super(ConcatenatingAudioSource(children: []));
 
   final Reader _reader;
 
@@ -104,7 +103,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
   //   await state.removeRange(start, end);
   // }
 
-  Future<void> clearPlaylist() async {
+  Future<void> clearQueue() async {
     await state.clear();
   }
 

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/view/favorites/favorite_tile.dart';
 
-
 class FavoritePage extends ConsumerWidget {
   const FavoritePage({Key? key}) : super(key: key);
 
@@ -69,9 +68,7 @@ class _FavoriteListState extends State<FavoriteList> {
                       } else {
                         if (queueHashcode != songsList.hashCode) {
                           print("changing source");
-                          await ref
-                              .read(queueController.notifier)
-                              .clearPlaylist();
+                          await ref.read(queueController.notifier).clearQueue();
 
                           await ref
                               .read(queueController.notifier)

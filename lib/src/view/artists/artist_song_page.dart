@@ -64,7 +64,7 @@ class ArtistSongsList extends ConsumerWidget {
               } else {
                 if (queueHashcode != songsList.hashCode) {
                   print("changing source");
-                  await ref.read(queueController.notifier).clearPlaylist();
+                  await ref.read(queueController.notifier).clearQueue();
 
                   await ref.read(queueController.notifier).setQueue(songsList);
 
