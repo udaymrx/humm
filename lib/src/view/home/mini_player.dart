@@ -53,7 +53,8 @@ class MiniMusicPlayer extends ConsumerWidget {
                         return res.when(
                           data: (data) {
                             if (data != null) {
-                              return Image.memory(data);
+                              return FittedBox(
+                                  fit: BoxFit.cover, child: Image.memory(data));
                             } else {
                               return const Icon(
                                 Icons.music_note,

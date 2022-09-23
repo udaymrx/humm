@@ -109,6 +109,10 @@ final playerStateProvider = StreamProvider<PlayerState>((ref) {
   return ref.watch(playerProvider.select((plyr) => plyr.playerStateStream));
 });
 
+final processingStateProvider = StreamProvider<ProcessingState>((ref) {
+  return ref.watch(playerProvider.select((plyr) => plyr.processingStateStream));
+});
+
 final playingIndexProvider = StreamProvider<int?>((ref) {
   return ref.watch(playerProvider.select((plyr) => plyr.currentIndexStream));
 });

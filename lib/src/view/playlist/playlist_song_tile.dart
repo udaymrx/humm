@@ -4,7 +4,6 @@ import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 
-
 class PlaylistSongTile extends StatelessWidget {
   const PlaylistSongTile({super.key, required this.song});
 
@@ -31,7 +30,8 @@ class PlaylistSongTile extends StatelessWidget {
                 return res.when(
                   data: (data) {
                     if (data != null) {
-                      return Image.memory(data);
+                      return FittedBox(
+                          fit: BoxFit.cover, child: Image.memory(data));
                     } else {
                       return const Icon(
                         Icons.music_note,
@@ -72,7 +72,9 @@ class PlaylistSongTile extends StatelessWidget {
                   children: [
                     Flexible(
                         child: Text(
-                      song.artist ?? "Unknown Artist",
+                      song.artist == "<unknown>"
+                          ? "Unknown Artist"
+                          : song.artist!,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,

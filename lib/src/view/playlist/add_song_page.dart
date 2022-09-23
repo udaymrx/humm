@@ -134,7 +134,8 @@ class SongCheckWidget extends ConsumerWidget {
           }),
         ),
       ),
-      subtitle: Text(song.artist ?? "Unknown Artist"),
+      subtitle:
+          Text(song.artist == "<unknown>" ? "Unknown Artist" : song.artist!),
       onChanged: (newState) {
         if (newState != null) {
           if (newState) {

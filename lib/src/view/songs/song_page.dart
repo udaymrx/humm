@@ -24,6 +24,7 @@ class SongPage extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Consumer(builder: (context, ref, child) {
                 final res = ref.watch(metaDataProvider);
@@ -35,13 +36,13 @@ class SongPage extends ConsumerWidget {
                     }
                     final metadata = state!.currentSource!.tag as MediaItem;
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Hero(
                           tag: "Art",
                           child: Container(
                             height: 356,
                             width: double.maxFinite,
-                            margin: const EdgeInsets.only(right: 16),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(36),
                               color: AppColors.primary,
@@ -55,7 +56,9 @@ class SongPage extends ConsumerWidget {
                                 return res.when(
                                   data: (data) {
                                     if (data != null) {
-                                      return Image.memory(data);
+                                      return FittedBox(
+                                          fit: BoxFit.cover,
+                                          child: Image.memory(data));
                                     } else {
                                       return const Icon(
                                         Icons.music_note,
