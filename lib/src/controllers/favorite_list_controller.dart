@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+// import 'dart:developer' as developer;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:on_audio_room/on_audio_room.dart';
@@ -15,7 +15,7 @@ class FavoutiteSongListNotifier
 
   Future<void> initList() async {
     var list = await _reader(roomProvider).getFavouriteSongs();
-    developer.log(list.toString());
+    // developer.log(list.toString());
 
     state = AsyncValue.data(list);
   }

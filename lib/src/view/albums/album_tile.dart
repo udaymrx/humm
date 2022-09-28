@@ -28,38 +28,40 @@ class AlbumTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.maxFinite,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
-              color: AppColors.primary,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(26),
-              child: Consumer(builder: (context, ref, child) {
-                final res = ref.watch(albumArtProvider(album.id));
-                return res.when(
-                  data: (data) {
-                    if (data != null) {
-                      return FittedBox(
-                          fit: BoxFit.cover, child: Image.memory(data));
-                    } else {
-                      return const Icon(
-                        Icons.music_note,
-                        color: AppColors.white,
-                      );
-                    }
-                  },
-                  error: (e, s) => const Icon(
-                    Icons.music_note,
-                    color: AppColors.white,
-                  ),
-                  loading: () => const Icon(
-                    Icons.music_note,
-                    color: AppColors.white,
-                  ),
-                );
-              }),
+          AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(26),
+                color: AppColors.primary,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(26),
+                child: Consumer(builder: (context, ref, child) {
+                  final res = ref.watch(albumArtProvider(album.id));
+                  return res.when(
+                    data: (data) {
+                      if (data != null) {
+                        return FittedBox(
+                            fit: BoxFit.cover, child: Image.memory(data));
+                      } else {
+                        return const Icon(
+                          Icons.music_note,
+                          color: AppColors.white,
+                        );
+                      }
+                    },
+                    error: (e, s) => const Icon(
+                      Icons.music_note,
+                      color: AppColors.white,
+                    ),
+                    loading: () => const Icon(
+                      Icons.music_note,
+                      color: AppColors.white,
+                    ),
+                  );
+                }),
+              ),
             ),
           ),
           Padding(

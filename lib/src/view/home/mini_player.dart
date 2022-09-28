@@ -97,41 +97,45 @@ class MiniMusicPlayer extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Hero(
-                      tag: 'title',
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          metadata.title,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Hero(
-                      tag: 'artist',
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          metadata.artist!,
-                          style: const TextStyle(
-                              fontSize: 12,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Hero(
+                        tag: 'title',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            metadata.title,
+                            style: const TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.greyStrong),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Hero(
+                        tag: 'artist',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            metadata.artist == "<unknown>"
+                                ? "Unknown Artist"
+                                : metadata.artist!,
+                            style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyStrong),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 // SvgPicture.asset(
