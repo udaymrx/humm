@@ -18,14 +18,6 @@ class AlbumPage extends ConsumerWidget {
         title: Text(album),
       ),
       body: AlbumSongsList(album: album),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // final lst = ref.read(albumFilterSongProvider(album));
-        },
-        child: const Icon(
-          Icons.play_arrow_rounded,
-        ),
-      ),
     );
   }
 }

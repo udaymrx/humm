@@ -122,7 +122,7 @@ class _RawPlayListState extends ConsumerState<RawPlayList> {
                         arguments: data[index].key);
                   },
                   title: Text(data[index].playlistName),
-                  subtitle: Text(data[index].playlistSongs.length.toString()),
+                  subtitle: Text("${data[index].playlistSongs.length} songs"),
                   trailing: IconButton(
                       onPressed: () async {
                         final deleted = await ref

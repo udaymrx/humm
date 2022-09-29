@@ -34,14 +34,6 @@ class FolderPage extends ConsumerWidget {
         title: Text(path.split('/').last),
       ),
       body: FolderSongsList(path: path),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // final lst = ref.read(albumFilterSongProvider(album));
-        },
-        child: const Icon(
-          Icons.play_arrow_rounded,
-        ),
-      ),
     );
   }
 }

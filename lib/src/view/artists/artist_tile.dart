@@ -14,9 +14,7 @@ class ArtistTile extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.pushNamed(context, ArtistPage.routeName,
-            arguments: artist.artist == "<unknown>"
-                ? "Unknown Artist"
-                : artist.artist);
+            arguments: artist.artist);
       },
       title: Text(
         artist.artist == "<unknown>" ? "Unknown Artist" : artist.artist,

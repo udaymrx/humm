@@ -39,11 +39,6 @@ class _MainPageState extends ConsumerState<MainPage> {
     setState(() {});
   }
 
-  @override
-  void dispose() {
-    ref.read(playerProvider).dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

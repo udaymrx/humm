@@ -20,7 +20,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           id: "${song.id}",
           // Metadata to display in the notification:
           album: song.album,
-          artist: song.artist ?? "Unknown Artist",
+          artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
           // artUri: Uri.parse('https://example.com/albumart.jpg'),
         ),
@@ -43,7 +43,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           id: "${song.id}",
           // Metadata to display in the notification:
           album: song.album,
-          artist: song.artist ?? "Unknown Artist",
+          artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
           // artUri: Uri.parse('https://example.com/albumart.jpg'),
         ),
@@ -66,7 +66,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           id: "${song.id}",
           // Metadata to display in the notification:
           album: song.album,
-          artist: song.artist ?? "Unknown Artist",
+          artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
           // artUri: Uri.parse('https://example.com/albumart.jpg'),
         ),
@@ -105,6 +105,12 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
 
   Future<void> clearQueue() async {
     await state.clear();
+  }
+
+  Future<void> dumpQueue() async {
+    await state.clear();
+    _reader(playerProvider).stop();
+    _reader(queueHashcodeProvider.state).state = null;
   }
 
   // Future<void> addPlaylist(List<SongModel> songsList) async {

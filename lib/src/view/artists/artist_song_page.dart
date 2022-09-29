@@ -15,17 +15,9 @@ class ArtistPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(artist),
+        title: Text(artist == "<unknown>" ? "Unknown Artist" : artist),
       ),
       body: ArtistSongsList(artist: artist),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // final lst = ref.read(albumFilterSongProvider(album));
-        },
-        child: const Icon(
-          Icons.play_arrow_rounded,
-        ),
-      ),
     );
   }
 }

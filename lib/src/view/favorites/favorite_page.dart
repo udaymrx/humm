@@ -10,7 +10,7 @@ class FavoritePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text("Favorite")),
-      body: FavoriteList(),
+      body: const FavoriteList(),
     );
   }
 }
