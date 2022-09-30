@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
-import 'package:humm/src/view/songs/song_page.dart';
+import 'package:humm/src/app/router/router.gr.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
-import '../../app/colors.dart';
+import '../../../app/colors.dart';
 
 class MiniMusicPlayer extends ConsumerWidget {
   const MiniMusicPlayer({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class MiniMusicPlayer extends ConsumerWidget {
         String? swipeDirection;
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, SongPage.routeName);
+            context.router.push(const SongRoute());
           },
           onVerticalDragUpdate: (details) {
             int sensitivity = 8;
@@ -41,12 +42,13 @@ class MiniMusicPlayer extends ConsumerWidget {
               return;
             }
             if (swipeDirection == 'Up') {
-              //handle swipe left event
-              Navigator.pushNamed(context, SongPage.routeName);
+              //handle swipe Up event
+              context.router.push(const SongRoute());
             }
             if (swipeDirection == 'Down') {
-              //handle swipe right event
+              //handle swipe down event
               await ref.read(queueController.notifier).dumpQueue();
+              ref.read(musicQueuedProvider.state).state = false;
             }
           },
           child: Padding(

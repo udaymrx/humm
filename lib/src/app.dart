@@ -1,18 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/theme.dart';
-import 'package:humm/src/view/main/main_page.dart';
 
 import 'app/global_provider.dart';
-import 'app/routes.dart';
+import 'app/router/router.dart';
+import 'app/router/router.gr.dart';
 
 /// The Widget that configures your application.
 class MyApp extends ConsumerWidget {
-  const MyApp({
-    super.key,
-  });
+  MyApp({super.key});
+
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +24,7 @@ class MyApp extends ConsumerWidget {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final themeMode = ref.watch(themeController);
-        return MaterialApp(
+        return MaterialApp.router(
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -61,8 +62,14 @@ class MyApp extends ConsumerWidget {
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
-          initialRoute: MainPage.routeName,
-          onGenerateRoute: RouterNav.generateRoute,
+          routerDelegate: AutoRouterDelegate(
+            _appRouter,
+            navigatorObservers: () => [AppRouteObserver()],
+          ),
+          routeInformationProvider: _appRouter.routeInfoProvider(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+          // initialRoute: MainPage.routeName,
+          // onGenerateRoute: RouterNav.generateRoute,
         );
       },
     );

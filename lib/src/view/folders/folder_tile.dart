@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:humm/src/app/colors.dart';
-import 'package:humm/src/view/folders/folder_page.dart';
+import 'package:humm/src/app/router/router.gr.dart';
 
 class FolderTile extends StatelessWidget {
   const FolderTile({super.key, required this.folder});
@@ -11,7 +12,7 @@ class FolderTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Navigator.pushNamed(context, FolderPage.routeName,arguments: folder);
+        context.router.push(FolderRoute(path: folder));
       },
       title: Text(folder.split('/').last),
       leading: const Icon(

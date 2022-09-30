@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:humm/src/view/albums/album_song_page.dart';
+import 'package:humm/src/app/router/router.gr.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/colors.dart';
@@ -22,8 +23,7 @@ class AlbumTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AlbumPage.routeName,
-            arguments: album.album);
+        context.router.push(AlbumRoute(album: album.album));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

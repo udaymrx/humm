@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:humm/src/app/colors.dart';
 import 'package:just_audio/just_audio.dart';
@@ -34,7 +35,7 @@ class SongPage extends ConsumerWidget {
             }
             if (swipeDirection == 'Down') {
               //handle swipe right event
-              Navigator.pop(context);
+              context.popRoute();
             }
           },
           child: Center(
@@ -49,7 +50,7 @@ class SongPage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => context.popRoute(),
                           icon: const Icon(
                             Icons.arrow_back,
                           ),

@@ -1,5 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:humm/src/view/artists/artist_song_page.dart';
+import 'package:humm/src/app/router/router.gr.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../app/colors.dart';
@@ -13,8 +14,7 @@ class ArtistTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Navigator.pushNamed(context, ArtistPage.routeName,
-            arguments: artist.artist);
+        context.router.push(ArtistRoute(artist: artist.artist));
       },
       title: Text(
         artist.artist == "<unknown>" ? "Unknown Artist" : artist.artist,

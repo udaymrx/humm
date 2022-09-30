@@ -1,11 +1,11 @@
 import 'dart:developer' as developer;
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:humm/src/view/playlist/add_song_page.dart';
-import 'package:humm/src/view/playlist/playlist_song_page.dart';
 
 import '../../app/global_provider.dart';
+import '../../app/router/router.gr.dart';
 
 // final rawPlaylist2Provider = FutureProvider<List<String>>((ref) async {
 //   final audioService = ref.read(playlistBoxProvider);
@@ -46,12 +46,13 @@ class _PlaylistPageState extends ConsumerState<PlaylistPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => context.popRoute(),
                           child: const Text("Cancel")),
                       const SizedBox(width: 16),
                       ElevatedButton(
                           onPressed: () {
-                            Navigator.pop(context, name);
+                            context.popRoute(name);
+                            // Navigator.pop(context, name);
                           },
                           child: const Text("Ok")),
                     ],
@@ -80,8 +81,10 @@ class _PlaylistPageState extends ConsumerState<PlaylistPage> {
                   if (id != null) {
                     ref.invalidate(listOfPlaylistProvider);
                     if (mounted) {
-                      Navigator.pushNamed(context, AddSongPage.routeName,
-                          arguments: id);
+                      context.router.push(AddSongRoute(id: id));
+
+                      // Navigator.pushNamed(context, AddSongPage.routeName,
+                      //     arguments: id);
                     }
                   }
                 }
@@ -118,8 +121,7 @@ class _RawPlayListState extends ConsumerState<RawPlayList> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, PlaylistSongPage.routeName,
-                        arguments: data[index].key);
+                    context.router.push(PlaylistSongRoute(id: data[index].key));
                   },
                   title: Text(data[index].playlistName),
                   subtitle: Text("${data[index].playlistSongs.length} songs"),

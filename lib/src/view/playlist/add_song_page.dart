@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -33,7 +35,7 @@ class _AddSongPageState extends ConsumerState<AddSongPage> {
           SnackBar(content: Text("${lst.length} songs added to the Playlist")));
     }
     if (mounted) {
-      Navigator.pop(context);
+      context.popRoute();
     }
   }
 

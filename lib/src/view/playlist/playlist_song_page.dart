@@ -95,6 +95,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
                       } else {
                         if (queueHashcode != songsList.hashCode) {
                           print("changing source");
+
                           await ref.read(queueController.notifier).clearQueue();
 
                           await ref
@@ -104,7 +105,12 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
                           ref.read(queueHashcodeProvider.state).state =
                               songsList.hashCode;
 
+                          print("avail indices: ${player.effectiveIndices}");
+                          print("seeking to $index");
+
                           await player.seek(Duration.zero, index: index);
+
+                          print("seeked to ${player.currentIndex}");
 
                           ref.read(musicQueuedProvider.state).state = true;
 

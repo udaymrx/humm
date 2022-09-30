@@ -30,7 +30,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
 
     await state.addAll(songs);
 
-    _reader(playerProvider).setAudioSource(state);
+    await _reader(playerProvider).setAudioSource(state);
   }
 
   Future<void> setFavoriteQueue(List<FavoritesEntity> songsList) async {
@@ -53,7 +53,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
 
     await state.addAll(songs);
 
-    _reader(playerProvider).setAudioSource(state);
+    await _reader(playerProvider).setAudioSource(state);
   }
 
   Future<void> setPlaylistQueue(List<SongEntity> songsList) async {
@@ -76,7 +76,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
 
     await state.addAll(songs);
 
-    _reader(playerProvider).setAudioSource(state);
+    await _reader(playerProvider).setAudioSource(state);
   }
 
   // Future<void> addSong(SongModel song) async {
@@ -109,7 +109,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
 
   Future<void> dumpQueue() async {
     await state.clear();
-    _reader(playerProvider).stop();
+    _reader(playerProvider).stop(); // Can be awaited
     _reader(queueHashcodeProvider.state).state = null;
   }
 

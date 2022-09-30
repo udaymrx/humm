@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +21,7 @@ Future<int?> openBottomSheet(BuildContext context) async {
                     return ListTile(
                       title: Text(lst[index].playlistName),
                       onTap: () {
-                        Navigator.pop(context, lst[index].key);
+                        context.popRoute(lst[index].key);
                       },
                     );
                   },
