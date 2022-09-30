@@ -95,7 +95,7 @@ class SongPage extends ConsumerWidget {
                                           } else {
                                             return const Icon(
                                               Icons.music_note,
-                                              size: 30,
+                                              size: 120,
                                               color: AppColors.white,
                                             );
                                           }
@@ -103,11 +103,11 @@ class SongPage extends ConsumerWidget {
                                         error: (e, s) => const Icon(
                                           Icons.music_note,
                                           color: AppColors.white,
-                                          size: 30,
+                                          size: 120,
                                         ),
                                         loading: () => const Icon(
                                           Icons.music_note,
-                                          size: 30,
+                                          size: 120,
                                           color: AppColors.white,
                                         ),
                                       );

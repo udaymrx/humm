@@ -73,7 +73,7 @@ class AppRouteObserver extends AutoRouterObserver {
       path: 'song',
       page: SongPage,
       transitionsBuilder: TransitionsBuilders.slideBottom,
-      durationInMilliseconds: 600,
+      durationInMilliseconds: 400,
     ),
     RedirectRoute(path: '*', redirectTo: '/'),
   ],

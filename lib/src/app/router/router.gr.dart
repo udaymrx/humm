@@ -42,7 +42,7 @@ class AppRouter extends _i13.RootStackRouter {
           routeData: routeData,
           child: const _i2.SongPage(),
           transitionsBuilder: _i13.TransitionsBuilders.slideBottom,
-          durationInMilliseconds: 600,
+          durationInMilliseconds: 400,
           opaque: true,
           barrierDismissible: false);
     },
