@@ -5,16 +5,16 @@ import '../app/global_provider.dart';
 
 class PlaylistSongListNotifier
     extends StateNotifier<AsyncValue<List<SongEntity>>> {
-  PlaylistSongListNotifier(this._reader, {required this.key})
+  PlaylistSongListNotifier(this.ref, {required this.key})
       : super(const AsyncValue.loading()) {
     initList();
   }
 
-  final Reader _reader;
+  final Ref ref;
   final int key;
 
   Future<void> initList() async {
-    var list = await _reader(roomProvider).getSongsFormPlaylist(key);
+    var list = await ref.read(roomProvider).getSongsFormPlaylist(key);
 
     state = AsyncValue.data(list);
   }

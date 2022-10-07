@@ -22,7 +22,7 @@ import '../services/audio_service.dart';
 
 final themeController =
     StateNotifierProvider<AppThemeNotifier, ThemeMode>((ref) {
-  return AppThemeNotifier(ref.read);
+  return AppThemeNotifier(ref);
 });
 
 final audioQueryProvider = Provider<AudioQueryService>((ref) {
@@ -52,7 +52,7 @@ final isFavoriteProvider = FutureProvider.family<bool, int>((ref, id) async {
 
 final favoriteSongProvider = StateNotifierProvider<FavoutiteSongListNotifier,
     AsyncValue<List<FavoritesEntity>>>((ref) {
-  return FavoutiteSongListNotifier(ref.read);
+  return FavoutiteSongListNotifier(ref);
 });
 
 final listOfPlaylistProvider =
@@ -68,7 +68,7 @@ final songsToAddProvider =
 
 final songsOfPlaylistProvider = StateNotifierProvider.autoDispose.family<
     PlaylistSongListNotifier, AsyncValue<List<SongEntity>>, int>((ref, key) {
-  return PlaylistSongListNotifier(ref.read, key: key);
+  return PlaylistSongListNotifier(ref, key: key);
 });
 
 final playerProvider = StateProvider<AudioPlayer>((ref) {
@@ -77,7 +77,7 @@ final playerProvider = StateProvider<AudioPlayer>((ref) {
 
 final queueController =
     StateNotifierProvider<QueueController, ConcatenatingAudioSource>((ref) {
-  return QueueController(ref.read);
+  return QueueController(ref);
 });
 
 final musicQueuedProvider = StateProvider<bool>((ref) {
@@ -90,7 +90,7 @@ final queueHashcodeProvider = StateProvider<int?>((ref) {
 
 final allSongProvider =
     StateNotifierProvider<SongListNotifier, AsyncValue<List<SongModel>>>((ref) {
-  return SongListNotifier(ref.read);
+  return SongListNotifier(ref);
 });
 
 final playingProvider = StreamProvider<bool>((ref) {

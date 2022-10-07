@@ -7,14 +7,14 @@ import '../app/global_provider.dart';
 
 class FavoutiteSongListNotifier
     extends StateNotifier<AsyncValue<List<FavoritesEntity>>> {
-  FavoutiteSongListNotifier(this._reader) : super(const AsyncValue.loading()) {
+  FavoutiteSongListNotifier(this.ref) : super(const AsyncValue.loading()) {
     initList();
   }
 
-  final Reader _reader;
+  final Ref ref;
 
   Future<void> initList() async {
-    var list = await _reader(roomProvider).getFavouriteSongs();
+    var list = await ref.read(roomProvider).getFavouriteSongs();
     // developer.log(list.toString());
 
     state = AsyncValue.data(list);

@@ -4,18 +4,17 @@ import 'package:on_audio_query/on_audio_query.dart';
 import '../app/global_provider.dart';
 
 class SongListNotifier extends StateNotifier<AsyncValue<List<SongModel>>> {
-  SongListNotifier(this._reader) : super(const AsyncValue.loading()) {
+  SongListNotifier(this.ref) : super(const AsyncValue.loading()) {
     initList();
   }
 
-  final Reader _reader;
+  final Ref ref;
 
   Future<void> initList() async {
-    var list = await _reader(audioQueryProvider).getSongs();
+    var list = await ref.read(audioQueryProvider).getSongs();
 
     final songlist = list.where((element) => element.isMusic!).toList();
 
     state = AsyncValue.data(songlist);
   }
-
 }

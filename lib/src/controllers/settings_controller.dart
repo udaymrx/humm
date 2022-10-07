@@ -13,14 +13,14 @@ final settingsProvider = Provider<SettingsService>((ref) {
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class AppThemeNotifier extends StateNotifier<ThemeMode> {
-  AppThemeNotifier(this._reader) : super(ThemeMode.system) {
+  AppThemeNotifier(this.ref) : super(ThemeMode.system) {
     loadSettings();
   }
 
-  final Reader _reader;
+  final Ref ref;
 
   Future<void> loadSettings() async {
-    final currentTheme = _reader(settingsProvider).themeMode();
+    final currentTheme = ref.read(settingsProvider).themeMode();
 
     state = currentTheme;
   }
@@ -37,6 +37,6 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
 
     // Persist the changes to a local database or the internet using the
     // SettingService.
-    await _reader(settingsProvider).updateThemeMode(newThemeMode);
+    await ref.read(settingsProvider).updateThemeMode(newThemeMode);
   }
 }
