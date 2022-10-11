@@ -125,32 +125,45 @@ class _RawPlayListState extends ConsumerState<RawPlayList> {
                   },
                   title: Text(data[index].playlistName),
                   subtitle: Text("${data[index].playlistSongs.length} songs"),
-                  trailing: IconButton(
-                      onPressed: () async {
-                        final deleted = await ref
-                            .read(roomProvider)
-                            .deletePlaylist(data[index].key);
-                        ref.invalidate(listOfPlaylistProvider);
+                  trailing: PopupMenuButton<int>(
+                    elevation: 30,
+                    position: PopupMenuPosition.under,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 1,
+                        height: 40,
+                        onTap: () async {
+                          final deleted = await ref
+                              .read(roomProvider)
+                              .deletePlaylist(data[index].key);
+                          ref.invalidate(listOfPlaylistProvider);
 
-                        if (deleted) {
-                          if (mounted) {
-                            ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                              const SnackBar(
-                                content: Text("Playlist Deleted!"),
-                              ),
-                            );
+                          if (deleted) {
+                            if (mounted) {
+                              ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                                const SnackBar(
+                                  content: Text("Playlist Deleted!"),
+                                ),
+                              );
+                            }
+                          } else {
+                            if (mounted) {
+                              ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text("Playlist could not be Deleted!"),
+                                ),
+                              );
+                            }
                           }
-                        } else {
-                          if (mounted) {
-                            ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                              const SnackBar(
-                                content: Text("Playlist could not be Deleted!"),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      icon: const Icon(Icons.more_vert)),
+                        },
+                        child: const Text("Delete Playlist"),
+                      ),
+                    ],
+                  ),
                 );
               },
               itemCount: data.length,

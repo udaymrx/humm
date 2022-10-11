@@ -9,6 +9,7 @@ import 'package:humm/src/view/main/main_page.dart';
 import 'package:humm/src/view/playlist/add_song_page.dart';
 import 'package:humm/src/view/playlist/playlist_page.dart';
 import 'package:humm/src/view/playlist/playlist_song_page.dart';
+import 'package:humm/src/view/queue/queue_page.dart';
 import 'package:humm/src/view/settings/settings_page.dart';
 import 'package:humm/src/view/songs/song_page.dart';
 
@@ -27,6 +28,7 @@ class AppRouteObserver extends AutoRouterObserver {
     AutoRoute(
       path: '/',
       // guards: [AuthGuard],
+      name: 'MainRouter',
       initial: true,
       page: MainPage,
       children: [
@@ -70,11 +72,12 @@ class AppRouteObserver extends AutoRouterObserver {
       ],
     ),
     CustomRoute(
-      path: 'song',
+      path: '/song',
       page: SongPage,
       transitionsBuilder: TransitionsBuilders.slideBottom,
       durationInMilliseconds: 400,
     ),
+    AutoRoute(path: 'queue', page: QueuePage),
     RedirectRoute(path: '*', redirectTo: '/'),
   ],
 )

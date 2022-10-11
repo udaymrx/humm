@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:humm/src/app/colors.dart';
+import 'package:humm/src/app/router/router.gr.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -38,305 +40,336 @@ class SongPage extends ConsumerWidget {
               context.popRoute();
             }
           },
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () => context.popRoute(),
-                          icon: const Icon(
-                            Icons.arrow_back,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 60,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => context.popRoute(),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                        ),
+                      ),
+                      const Spacer(),
+                      PopupMenuButton<int>(
+                        elevation: 30,
+                        position: PopupMenuPosition.under,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        icon: SvgPicture.asset("assets/images/more_circle.svg"),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 1,
+                            height: 40,
+                            onTap: () {
+                              context.router.push(const QueueRoute());
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(Icons.queue_music_rounded),
+                                SizedBox(width: 12),
+                                Text("Show Queue"),
+                              ],
+                            ),
                           ),
-                        )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Consumer(builder: (context, ref, child) {
+                      final res = ref.watch(metaDataProvider);
+
+                      return res.when(
+                        data: (state) {
+                          if (state?.sequence.isEmpty ?? true) {
+                            return const SizedBox();
+                          }
+                          final metadata =
+                              state!.currentSource!.tag as MediaItem;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Hero(
+                                tag: "Art",
+                                child: AspectRatio(
+                                  aspectRatio: 1 / 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(36),
+                                      color: AppColors.primary,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(36),
+                                      child: Consumer(
+                                          builder: (context, ref, child) {
+                                        final res = ref.watch(songArtProvider(
+                                            int.parse(metadata.id)));
+
+                                        return res.when(
+                                          data: (data) {
+                                            if (data != null) {
+                                              return FittedBox(
+                                                  fit: BoxFit.cover,
+                                                  child: Image.memory(data));
+                                            } else {
+                                              return const Icon(
+                                                Icons.music_note,
+                                                size: 120,
+                                                color: AppColors.white,
+                                              );
+                                            }
+                                          },
+                                          error: (e, s) => const Icon(
+                                            Icons.music_note,
+                                            color: AppColors.white,
+                                            size: 120,
+                                          ),
+                                          loading: () => const Icon(
+                                            Icons.music_note,
+                                            size: 120,
+                                            color: AppColors.white,
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Hero(
+                                tag: "title",
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Text(
+                                    metadata.title,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Hero(
+                                tag: "artist",
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Text(
+                                    metadata.artist == "<unknown>"
+                                        ? "Unknown Artist"
+                                        : metadata.artist!,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.greyStrong),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        error: (error, st) => const SizedBox(),
+                        loading: () => const CircularProgressIndicator(),
+                      );
+                    }),
+                    const SongSeeker(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Consumer(builder: (context, ref, child) {
+                          final res = ref.watch(dragProvider);
+
+                          return res.when(
+                            data: (data) {
+                              var valid =
+                                  data.duration.compareTo(data.position) >= 0;
+                              return Text(
+                                (valid ? data.position : data.duration)
+                                    .toString()
+                                    .substring(2, 7),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.greyStrong),
+                              );
+                            },
+                            error: (error, st) => const SizedBox(),
+                            loading: () => const CircularProgressIndicator(),
+                          );
+                        }),
+                        Consumer(builder: (context, ref, child) {
+                          final res = ref.watch(remainingProvider);
+                          return res.when(
+                            data: (rem) {
+                              return Text(
+                                rem.toString().substring(2, 7),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.greyStrong),
+                              );
+                            },
+                            error: (error, st) => const SizedBox(),
+                            loading: () => const CircularProgressIndicator(),
+                          );
+                        }),
                       ],
                     ),
-                  ),
-                  Consumer(builder: (context, ref, child) {
-                    final res = ref.watch(metaDataProvider);
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Consumer(builder: (context, ref, child) {
+                          final res = ref.watch(shuffleProvider);
 
-                    return res.when(
-                      data: (state) {
-                        if (state?.sequence.isEmpty ?? true) {
-                          return const SizedBox();
-                        }
-                        final metadata = state!.currentSource!.tag as MediaItem;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Hero(
-                              tag: "Art",
-                              child: AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(36),
-                                    color: AppColors.primary,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(36),
-                                    child: Consumer(
-                                        builder: (context, ref, child) {
-                                      final res = ref.watch(songArtProvider(
-                                          int.parse(metadata.id)));
-
-                                      return res.when(
-                                        data: (data) {
-                                          if (data != null) {
-                                            return FittedBox(
-                                                fit: BoxFit.cover,
-                                                child: Image.memory(data));
-                                          } else {
-                                            return const Icon(
-                                              Icons.music_note,
-                                              size: 120,
-                                              color: AppColors.white,
-                                            );
-                                          }
-                                        },
-                                        error: (e, s) => const Icon(
-                                          Icons.music_note,
-                                          color: AppColors.white,
-                                          size: 120,
-                                        ),
-                                        loading: () => const Icon(
-                                          Icons.music_note,
-                                          size: 120,
-                                          color: AppColors.white,
-                                        ),
-                                      );
-                                    }),
-                                  ),
+                          return res.when(
+                            data: (shuffleModeEnabled) {
+                              return IconButton(
+                                onPressed: () async {
+                                  final enable = !shuffleModeEnabled;
+                                  if (enable) {
+                                    await player.shuffle();
+                                  }
+                                  await player.setShuffleModeEnabled(enable);
+                                },
+                                icon: Icon(
+                                  Icons.shuffle,
+                                  color: shuffleModeEnabled
+                                      ? AppColors.primary
+                                      : AppColors.grey,
                                 ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Hero(
-                              tag: "title",
-                              child: Material(
-                                color: Colors.transparent,
-                                child: Text(
-                                  metadata.title,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Hero(
-                              tag: "artist",
-                              child: Material(
-                                color: Colors.transparent,
-                                child: Text(
-                                  metadata.artist == "<unknown>"
-                                      ? "Unknown Artist"
-                                      : metadata.artist!,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.greyStrong),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                      error: (error, st) => const SizedBox(),
-                      loading: () => const CircularProgressIndicator(),
-                    );
-                  }),
-                  const SongSeeker(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Consumer(builder: (context, ref, child) {
-                        final res = ref.watch(dragProvider);
-
-                        return res.when(
-                          data: (data) {
-                            var valid =
-                                data.duration.compareTo(data.position) >= 0;
-                            return Text(
-                              (valid ? data.position : data.duration)
-                                  .toString()
-                                  .substring(2, 7),
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.greyStrong),
-                            );
-                          },
-                          error: (error, st) => const SizedBox(),
-                          loading: () => const CircularProgressIndicator(),
-                        );
-                      }),
-                      Consumer(builder: (context, ref, child) {
-                        final res = ref.watch(remainingProvider);
-                        return res.when(
-                          data: (rem) {
-                            return Text(
-                              rem.toString().substring(2, 7),
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.greyStrong),
-                            );
-                          },
-                          error: (error, st) => const SizedBox(),
-                          loading: () => const CircularProgressIndicator(),
-                        );
-                      }),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Consumer(builder: (context, ref, child) {
-                        final res = ref.watch(shuffleProvider);
-
-                        return res.when(
-                          data: (shuffleModeEnabled) {
-                            return IconButton(
-                              onPressed: () async {
-                                final enable = !shuffleModeEnabled;
-                                if (enable) {
-                                  await player.shuffle();
-                                }
-                                await player.setShuffleModeEnabled(enable);
-                              },
-                              icon: Icon(
-                                Icons.shuffle,
-                                color: shuffleModeEnabled
-                                    ? AppColors.primary
-                                    : AppColors.grey,
-                              ),
-                            );
-                          },
-                          error: (error, st) => const SizedBox(),
-                          loading: () => const CircularProgressIndicator(),
-                        );
-                      }),
-                      IconButton(
-                        onPressed: () {
-                          if (player.hasPrevious) {
-                            player.seekToPrevious();
-                            if (!player.playing) {
-                              player.play();
+                              );
+                            },
+                            error: (error, st) => const SizedBox(),
+                            loading: () => const CircularProgressIndicator(),
+                          );
+                        }),
+                        IconButton(
+                          onPressed: () {
+                            if (player.hasPrevious) {
+                              player.seekToPrevious();
+                              if (!player.playing) {
+                                player.play();
+                              }
+                            } else {
+                              player.seek(Duration.zero);
+                              if (!player.playing) {
+                                player.play();
+                              }
                             }
-                          } else {
-                            player.seek(Duration.zero);
-                            if (!player.playing) {
-                              player.play();
-                            }
-                          }
-                        },
-                        icon: const Icon(Icons.skip_previous),
-                      ),
-                      Consumer(builder: (context, ref, child) {
-                        final res = ref.watch(playerStateProvider);
+                          },
+                          icon: const Icon(Icons.skip_previous),
+                        ),
+                        Consumer(builder: (context, ref, child) {
+                          final res = ref.watch(playerStateProvider);
 
-                        ref.listen(playerStateProvider, (previous, next) {
-                          next.whenData((value) {
-                            // debugPrint(value.processingState.name);
-                            if (value.processingState ==
-                                ProcessingState.completed) {
-                              debugPrint("playing completed");
-                              player.stop();
-                            }
+                          ref.listen(playerStateProvider, (previous, next) {
+                            next.whenData((value) {
+                              // debugPrint(value.processingState.name);
+                              if (value.processingState ==
+                                  ProcessingState.completed) {
+                                debugPrint("playing completed");
+                                player.stop();
+                              }
+                            });
                           });
-                        });
 
-                        return res.when(
-                          data: (state) {
-                            return IconButton(
-                              onPressed: () {
-                                if (state.playing) {
-                                  player.pause();
-                                } else {
-                                  player.play();
-                                }
-                              },
-                              icon: Icon(state.playing
-                                  ? Icons.pause
-                                  : Icons.play_arrow),
-                            );
+                          return res.when(
+                            data: (state) {
+                              return IconButton(
+                                onPressed: () {
+                                  if (state.playing) {
+                                    player.pause();
+                                  } else {
+                                    player.play();
+                                  }
+                                },
+                                icon: Icon(state.playing
+                                    ? Icons.pause
+                                    : Icons.play_arrow),
+                              );
+                            },
+                            error: (error, st) => const SizedBox(),
+                            loading: () => const CircularProgressIndicator(),
+                          );
+                        }),
+                        IconButton(
+                          onPressed: () {
+                            if (player.hasNext) {
+                              player.seekToNext();
+                              if (!player.playing) {
+                                player.play();
+                              }
+                            } else {
+                              if (player.playing) {
+                                player.pause();
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("No more song in the queue")));
+                            }
                           },
-                          error: (error, st) => const SizedBox(),
-                          loading: () => const CircularProgressIndicator(),
-                        );
-                      }),
-                      IconButton(
-                        onPressed: () {
-                          if (player.hasNext) {
-                            player.seekToNext();
-                            if (!player.playing) {
-                              player.play();
-                            }
-                          } else {
-                            if (player.playing) {
-                              player.pause();
-                            }
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text("No more song in the queue")));
-                          }
-                        },
-                        icon: const Icon(Icons.skip_next),
-                      ),
-                      Consumer(builder: (context, ref, child) {
-                        final res = ref.watch(loopProvider);
+                          icon: const Icon(Icons.skip_next),
+                        ),
+                        Consumer(builder: (context, ref, child) {
+                          final res = ref.watch(loopProvider);
 
-                        return res.when(
-                          data: (loopMode) {
-                            return IconButton(
-                              onPressed: () {
-                                switch (loopMode) {
-                                  case LoopMode.off:
-                                    player.setLoopMode(LoopMode.all);
-                                    break;
-                                  case LoopMode.all:
-                                    player.setLoopMode(LoopMode.one);
-                                    break;
-                                  case LoopMode.one:
-                                    player.setLoopMode(LoopMode.off);
-                                    break;
-                                  default:
-                                }
-                              },
-                              icon: Icon(
-                                loopMode == LoopMode.off
-                                    ? Icons.repeat
-                                    : loopMode == LoopMode.all
-                                        ? Icons.repeat
-                                        : Icons.repeat_one,
-                                color: loopMode == LoopMode.off
-                                    ? AppColors.grey
-                                    : AppColors.primary,
-                              ),
-                            );
-                          },
-                          error: (error, st) => const SizedBox(),
-                          loading: () => const CircularProgressIndicator(),
-                        );
-                      }),
-                    ],
-                  ),
-                ],
+                          return res.when(
+                            data: (loopMode) {
+                              return IconButton(
+                                onPressed: () {
+                                  switch (loopMode) {
+                                    case LoopMode.off:
+                                      player.setLoopMode(LoopMode.all);
+                                      break;
+                                    case LoopMode.all:
+                                      player.setLoopMode(LoopMode.one);
+                                      break;
+                                    case LoopMode.one:
+                                      player.setLoopMode(LoopMode.off);
+                                      break;
+                                    default:
+                                  }
+                                },
+                                icon: Icon(
+                                  loopMode == LoopMode.off
+                                      ? Icons.repeat
+                                      : loopMode == LoopMode.all
+                                          ? Icons.repeat
+                                          : Icons.repeat_one,
+                                  color: loopMode == LoopMode.off
+                                      ? AppColors.grey
+                                      : AppColors.primary,
+                                ),
+                              );
+                            },
+                            error: (error, st) => const SizedBox(),
+                            loading: () => const CircularProgressIndicator(),
+                          );
+                        }),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

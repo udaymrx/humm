@@ -19,6 +19,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           // Specify a unique ID for each media item:
           id: "${song.id}",
           // Metadata to display in the notification:
+          duration: Duration(milliseconds: song.duration ?? 0),
           album: song.album,
           artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
@@ -42,6 +43,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           // Specify a unique ID for each media item:
           id: "${song.id}",
           // Metadata to display in the notification:
+          duration: Duration(milliseconds: song.duration ?? 0),
           album: song.album,
           artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
@@ -65,6 +67,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
           // Specify a unique ID for each media item:
           id: "${song.id}",
           // Metadata to display in the notification:
+          duration: Duration(milliseconds: song.duration ?? 0),
           album: song.album,
           artist: song.artist == "<unknown>" ? "Unknown Artist" : song.artist,
           title: song.title,
@@ -102,6 +105,21 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
   // Future<void> removeSongRange(int start, int end) async {
   //   await state.removeRange(start, end);
   // }
+
+  Future<void> clearKeepSingle() async {
+    final index = ref.read(playerProvider).currentIndex!;
+    var noOfSongs = state.length;
+    print("currentIndex: $index, no. of Songs: $noOfSongs");
+    print("last: ${noOfSongs - 1}");
+    if (index == 0) {
+      await state.removeRange(1, noOfSongs);
+    } else if (index == (noOfSongs - 1)) {
+      await state.removeRange(0, noOfSongs - 1);
+    } else {
+      await state.removeRange(index + 1, noOfSongs);
+      await state.removeRange(0, index);
+    }
+  }
 
   Future<void> clearQueue() async {
     await state.clear();

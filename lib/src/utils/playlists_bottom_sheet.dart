@@ -12,7 +12,7 @@ Future<int?> openBottomSheet(BuildContext context) async {
           width: double.maxFinite,
           padding: const EdgeInsets.all(20),
           child: Consumer(builder: (context, ref, child) {
-            final value = ref.read(listOfPlaylistProvider);
+            final value = ref.watch(listOfPlaylistProvider);
             return value.when(
               data: (lst) {
                 return ListView.builder(

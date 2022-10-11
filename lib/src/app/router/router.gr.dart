@@ -11,218 +11,232 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
-import 'package:auto_route/empty_router_widgets.dart' as _i3;
-import 'package:flutter/material.dart' as _i14;
-import 'package:flutter/widgets.dart' as _i15;
-import 'package:humm/src/view/albums/album_song_page.dart' as _i6;
-import 'package:humm/src/view/artists/artist_song_page.dart' as _i5;
-import 'package:humm/src/view/favorites/favorite_page.dart' as _i8;
-import 'package:humm/src/view/folders/folder_page.dart' as _i7;
-import 'package:humm/src/view/home/home_page.dart' as _i4;
+import 'package:auto_route/auto_route.dart' as _i14;
+import 'package:auto_route/empty_router_widgets.dart' as _i4;
+import 'package:flutter/material.dart' as _i15;
+import 'package:flutter/widgets.dart' as _i16;
+import 'package:humm/src/view/albums/album_song_page.dart' as _i7;
+import 'package:humm/src/view/artists/artist_song_page.dart' as _i6;
+import 'package:humm/src/view/favorites/favorite_page.dart' as _i9;
+import 'package:humm/src/view/folders/folder_page.dart' as _i8;
+import 'package:humm/src/view/home/home_page.dart' as _i5;
 import 'package:humm/src/view/main/main_page.dart' as _i1;
-import 'package:humm/src/view/playlist/add_song_page.dart' as _i11;
-import 'package:humm/src/view/playlist/playlist_page.dart' as _i9;
-import 'package:humm/src/view/playlist/playlist_song_page.dart' as _i10;
-import 'package:humm/src/view/settings/settings_page.dart' as _i12;
+import 'package:humm/src/view/playlist/add_song_page.dart' as _i12;
+import 'package:humm/src/view/playlist/playlist_page.dart' as _i10;
+import 'package:humm/src/view/playlist/playlist_song_page.dart' as _i11;
+import 'package:humm/src/view/queue/queue_page.dart' as _i3;
+import 'package:humm/src/view/settings/settings_page.dart' as _i13;
 import 'package:humm/src/view/songs/song_page.dart' as _i2;
 
-class AppRouter extends _i13.RootStackRouter {
-  AppRouter([_i14.GlobalKey<_i14.NavigatorState>? navigatorKey])
+class AppRouter extends _i14.RootStackRouter {
+  AppRouter([_i15.GlobalKey<_i15.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i13.PageFactory> pagesMap = {
-    MainRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+  final Map<String, _i14.PageFactory> pagesMap = {
+    MainRouter.name: (routeData) {
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i1.MainPage());
     },
     SongRoute.name: (routeData) {
-      return _i13.CustomPage<dynamic>(
+      return _i14.CustomPage<dynamic>(
           routeData: routeData,
           child: const _i2.SongPage(),
-          transitionsBuilder: _i13.TransitionsBuilders.slideBottom,
+          transitionsBuilder: _i14.TransitionsBuilders.slideBottom,
           durationInMilliseconds: 400,
           opaque: true,
           barrierDismissible: false);
     },
+    QueueRoute.name: (routeData) {
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i3.QueuePage());
+    },
     HomeRouter.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i3.EmptyRouterPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i4.EmptyRouterPage());
     },
     FavoriteRouter.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i3.EmptyRouterPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i4.EmptyRouterPage());
     },
     PlaylistRouter.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i3.EmptyRouterPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i4.EmptyRouterPage());
     },
     SettingsRouter.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i3.EmptyRouterPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i4.EmptyRouterPage());
     },
     HomeRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i4.HomePage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i5.HomePage());
     },
     ArtistRoute.name: (routeData) {
       final args = routeData.argsAs<ArtistRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i5.ArtistPage(key: args.key, artist: args.artist));
+          child: _i6.ArtistPage(key: args.key, artist: args.artist));
     },
     AlbumRoute.name: (routeData) {
       final args = routeData.argsAs<AlbumRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i6.AlbumPage(key: args.key, album: args.album));
+          child: _i7.AlbumPage(key: args.key, album: args.album));
     },
     FolderRoute.name: (routeData) {
       final args = routeData.argsAs<FolderRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i7.FolderPage(key: args.key, path: args.path));
+          child: _i8.FolderPage(key: args.key, path: args.path));
     },
     FavoriteRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i8.FavoritePage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i9.FavoritePage());
     },
     PlaylistRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i9.PlaylistPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i10.PlaylistPage());
     },
     PlaylistSongRoute.name: (routeData) {
       final args = routeData.argsAs<PlaylistSongRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i10.PlaylistSongPage(key: args.key, id: args.id));
+          child: _i11.PlaylistSongPage(key: args.key, id: args.id));
     },
     AddSongRoute.name: (routeData) {
       final args = routeData.argsAs<AddSongRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i14.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i11.AddSongPage(key: args.key, id: args.id));
+          child: _i12.AddSongPage(key: args.key, id: args.id));
     },
     SettingsRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i12.SettingsPage());
+      return _i14.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i13.SettingsPage());
     }
   };
 
   @override
-  List<_i13.RouteConfig> get routes => [
-        _i13.RouteConfig(MainRoute.name, path: '/', children: [
-          _i13.RouteConfig(HomeRouter.name,
+  List<_i14.RouteConfig> get routes => [
+        _i14.RouteConfig(MainRouter.name, path: '/', children: [
+          _i14.RouteConfig(HomeRouter.name,
               path: 'home',
-              parent: MainRoute.name,
+              parent: MainRouter.name,
               children: [
-                _i13.RouteConfig(HomeRoute.name,
+                _i14.RouteConfig(HomeRoute.name,
                     path: '', parent: HomeRouter.name),
-                _i13.RouteConfig(ArtistRoute.name,
+                _i14.RouteConfig(ArtistRoute.name,
                     path: 'artist', parent: HomeRouter.name),
-                _i13.RouteConfig(AlbumRoute.name,
+                _i14.RouteConfig(AlbumRoute.name,
                     path: 'album', parent: HomeRouter.name),
-                _i13.RouteConfig(FolderRoute.name,
+                _i14.RouteConfig(FolderRoute.name,
                     path: 'folder', parent: HomeRouter.name)
               ]),
-          _i13.RouteConfig(FavoriteRouter.name,
+          _i14.RouteConfig(FavoriteRouter.name,
               path: 'favorite',
-              parent: MainRoute.name,
+              parent: MainRouter.name,
               children: [
-                _i13.RouteConfig(FavoriteRoute.name,
+                _i14.RouteConfig(FavoriteRoute.name,
                     path: '', parent: FavoriteRouter.name)
               ]),
-          _i13.RouteConfig(PlaylistRouter.name,
+          _i14.RouteConfig(PlaylistRouter.name,
               path: 'playlist',
-              parent: MainRoute.name,
+              parent: MainRouter.name,
               children: [
-                _i13.RouteConfig(PlaylistRoute.name,
+                _i14.RouteConfig(PlaylistRoute.name,
                     path: '', parent: PlaylistRouter.name),
-                _i13.RouteConfig(PlaylistSongRoute.name,
+                _i14.RouteConfig(PlaylistSongRoute.name,
                     path: 'playlist-songs', parent: PlaylistRouter.name),
-                _i13.RouteConfig(AddSongRoute.name,
+                _i14.RouteConfig(AddSongRoute.name,
                     path: 'addSong', parent: PlaylistRouter.name)
               ]),
-          _i13.RouteConfig(SettingsRouter.name,
+          _i14.RouteConfig(SettingsRouter.name,
               path: 'settings',
-              parent: MainRoute.name,
+              parent: MainRouter.name,
               children: [
-                _i13.RouteConfig(SettingsRoute.name,
+                _i14.RouteConfig(SettingsRoute.name,
                     path: '', parent: SettingsRouter.name)
               ])
         ]),
-        _i13.RouteConfig(SongRoute.name, path: 'song'),
-        _i13.RouteConfig('*#redirect',
+        _i14.RouteConfig(SongRoute.name, path: '/song'),
+        _i14.RouteConfig(QueueRoute.name, path: 'queue'),
+        _i14.RouteConfig('*#redirect',
             path: '*', redirectTo: '/', fullMatch: true)
       ];
 }
 
 /// generated route for
 /// [_i1.MainPage]
-class MainRoute extends _i13.PageRouteInfo<void> {
-  const MainRoute({List<_i13.PageRouteInfo>? children})
-      : super(MainRoute.name, path: '/', initialChildren: children);
+class MainRouter extends _i14.PageRouteInfo<void> {
+  const MainRouter({List<_i14.PageRouteInfo>? children})
+      : super(MainRouter.name, path: '/', initialChildren: children);
 
-  static const String name = 'MainRoute';
+  static const String name = 'MainRouter';
 }
 
 /// generated route for
 /// [_i2.SongPage]
-class SongRoute extends _i13.PageRouteInfo<void> {
-  const SongRoute() : super(SongRoute.name, path: 'song');
+class SongRoute extends _i14.PageRouteInfo<void> {
+  const SongRoute() : super(SongRoute.name, path: '/song');
 
   static const String name = 'SongRoute';
 }
 
 /// generated route for
-/// [_i3.EmptyRouterPage]
-class HomeRouter extends _i13.PageRouteInfo<void> {
-  const HomeRouter({List<_i13.PageRouteInfo>? children})
+/// [_i3.QueuePage]
+class QueueRoute extends _i14.PageRouteInfo<void> {
+  const QueueRoute() : super(QueueRoute.name, path: 'queue');
+
+  static const String name = 'QueueRoute';
+}
+
+/// generated route for
+/// [_i4.EmptyRouterPage]
+class HomeRouter extends _i14.PageRouteInfo<void> {
+  const HomeRouter({List<_i14.PageRouteInfo>? children})
       : super(HomeRouter.name, path: 'home', initialChildren: children);
 
   static const String name = 'HomeRouter';
 }
 
 /// generated route for
-/// [_i3.EmptyRouterPage]
-class FavoriteRouter extends _i13.PageRouteInfo<void> {
-  const FavoriteRouter({List<_i13.PageRouteInfo>? children})
+/// [_i4.EmptyRouterPage]
+class FavoriteRouter extends _i14.PageRouteInfo<void> {
+  const FavoriteRouter({List<_i14.PageRouteInfo>? children})
       : super(FavoriteRouter.name, path: 'favorite', initialChildren: children);
 
   static const String name = 'FavoriteRouter';
 }
 
 /// generated route for
-/// [_i3.EmptyRouterPage]
-class PlaylistRouter extends _i13.PageRouteInfo<void> {
-  const PlaylistRouter({List<_i13.PageRouteInfo>? children})
+/// [_i4.EmptyRouterPage]
+class PlaylistRouter extends _i14.PageRouteInfo<void> {
+  const PlaylistRouter({List<_i14.PageRouteInfo>? children})
       : super(PlaylistRouter.name, path: 'playlist', initialChildren: children);
 
   static const String name = 'PlaylistRouter';
 }
 
 /// generated route for
-/// [_i3.EmptyRouterPage]
-class SettingsRouter extends _i13.PageRouteInfo<void> {
-  const SettingsRouter({List<_i13.PageRouteInfo>? children})
+/// [_i4.EmptyRouterPage]
+class SettingsRouter extends _i14.PageRouteInfo<void> {
+  const SettingsRouter({List<_i14.PageRouteInfo>? children})
       : super(SettingsRouter.name, path: 'settings', initialChildren: children);
 
   static const String name = 'SettingsRouter';
 }
 
 /// generated route for
-/// [_i4.HomePage]
-class HomeRoute extends _i13.PageRouteInfo<void> {
+/// [_i5.HomePage]
+class HomeRoute extends _i14.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: '');
 
   static const String name = 'HomeRoute';
 }
 
 /// generated route for
-/// [_i5.ArtistPage]
-class ArtistRoute extends _i13.PageRouteInfo<ArtistRouteArgs> {
-  ArtistRoute({_i15.Key? key, required String artist})
+/// [_i6.ArtistPage]
+class ArtistRoute extends _i14.PageRouteInfo<ArtistRouteArgs> {
+  ArtistRoute({_i16.Key? key, required String artist})
       : super(ArtistRoute.name,
             path: 'artist', args: ArtistRouteArgs(key: key, artist: artist));
 
@@ -232,7 +246,7 @@ class ArtistRoute extends _i13.PageRouteInfo<ArtistRouteArgs> {
 class ArtistRouteArgs {
   const ArtistRouteArgs({this.key, required this.artist});
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final String artist;
 
@@ -243,9 +257,9 @@ class ArtistRouteArgs {
 }
 
 /// generated route for
-/// [_i6.AlbumPage]
-class AlbumRoute extends _i13.PageRouteInfo<AlbumRouteArgs> {
-  AlbumRoute({_i15.Key? key, required String album})
+/// [_i7.AlbumPage]
+class AlbumRoute extends _i14.PageRouteInfo<AlbumRouteArgs> {
+  AlbumRoute({_i16.Key? key, required String album})
       : super(AlbumRoute.name,
             path: 'album', args: AlbumRouteArgs(key: key, album: album));
 
@@ -255,7 +269,7 @@ class AlbumRoute extends _i13.PageRouteInfo<AlbumRouteArgs> {
 class AlbumRouteArgs {
   const AlbumRouteArgs({this.key, required this.album});
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final String album;
 
@@ -266,9 +280,9 @@ class AlbumRouteArgs {
 }
 
 /// generated route for
-/// [_i7.FolderPage]
-class FolderRoute extends _i13.PageRouteInfo<FolderRouteArgs> {
-  FolderRoute({_i15.Key? key, required String path})
+/// [_i8.FolderPage]
+class FolderRoute extends _i14.PageRouteInfo<FolderRouteArgs> {
+  FolderRoute({_i16.Key? key, required String path})
       : super(FolderRoute.name,
             path: 'folder', args: FolderRouteArgs(key: key, path: path));
 
@@ -278,7 +292,7 @@ class FolderRoute extends _i13.PageRouteInfo<FolderRouteArgs> {
 class FolderRouteArgs {
   const FolderRouteArgs({this.key, required this.path});
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final String path;
 
@@ -289,25 +303,25 @@ class FolderRouteArgs {
 }
 
 /// generated route for
-/// [_i8.FavoritePage]
-class FavoriteRoute extends _i13.PageRouteInfo<void> {
+/// [_i9.FavoritePage]
+class FavoriteRoute extends _i14.PageRouteInfo<void> {
   const FavoriteRoute() : super(FavoriteRoute.name, path: '');
 
   static const String name = 'FavoriteRoute';
 }
 
 /// generated route for
-/// [_i9.PlaylistPage]
-class PlaylistRoute extends _i13.PageRouteInfo<void> {
+/// [_i10.PlaylistPage]
+class PlaylistRoute extends _i14.PageRouteInfo<void> {
   const PlaylistRoute() : super(PlaylistRoute.name, path: '');
 
   static const String name = 'PlaylistRoute';
 }
 
 /// generated route for
-/// [_i10.PlaylistSongPage]
-class PlaylistSongRoute extends _i13.PageRouteInfo<PlaylistSongRouteArgs> {
-  PlaylistSongRoute({_i15.Key? key, required int id})
+/// [_i11.PlaylistSongPage]
+class PlaylistSongRoute extends _i14.PageRouteInfo<PlaylistSongRouteArgs> {
+  PlaylistSongRoute({_i16.Key? key, required int id})
       : super(PlaylistSongRoute.name,
             path: 'playlist-songs',
             args: PlaylistSongRouteArgs(key: key, id: id));
@@ -318,7 +332,7 @@ class PlaylistSongRoute extends _i13.PageRouteInfo<PlaylistSongRouteArgs> {
 class PlaylistSongRouteArgs {
   const PlaylistSongRouteArgs({this.key, required this.id});
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final int id;
 
@@ -329,9 +343,9 @@ class PlaylistSongRouteArgs {
 }
 
 /// generated route for
-/// [_i11.AddSongPage]
-class AddSongRoute extends _i13.PageRouteInfo<AddSongRouteArgs> {
-  AddSongRoute({_i15.Key? key, required int id})
+/// [_i12.AddSongPage]
+class AddSongRoute extends _i14.PageRouteInfo<AddSongRouteArgs> {
+  AddSongRoute({_i16.Key? key, required int id})
       : super(AddSongRoute.name,
             path: 'addSong', args: AddSongRouteArgs(key: key, id: id));
 
@@ -341,7 +355,7 @@ class AddSongRoute extends _i13.PageRouteInfo<AddSongRouteArgs> {
 class AddSongRouteArgs {
   const AddSongRouteArgs({this.key, required this.id});
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final int id;
 
@@ -352,8 +366,8 @@ class AddSongRouteArgs {
 }
 
 /// generated route for
-/// [_i12.SettingsPage]
-class SettingsRoute extends _i13.PageRouteInfo<void> {
+/// [_i13.SettingsPage]
+class SettingsRoute extends _i14.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: '');
 
   static const String name = 'SettingsRoute';
