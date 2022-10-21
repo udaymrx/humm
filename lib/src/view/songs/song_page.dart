@@ -114,52 +114,55 @@ class SongPage extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Expanded(
-                                    child: Hero(
-                                      tag: "Art",
-                                      child: AspectRatio(
-                                        aspectRatio: 1 / 1,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(36),
-                                            color: AppColors.primary,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(36),
-                                            child: Consumer(
-                                                builder: (context, ref, child) {
-                                              final res = ref.watch(
-                                                  songArtProvider(
-                                                      int.parse(metadata.id)));
+                                    child: Center(
+                                      child: Hero(
+                                        tag: "Art",
+                                        child: AspectRatio(
+                                          aspectRatio: 1 / 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(36),
+                                              color: AppColors.primary,
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(36),
+                                              child: Consumer(builder:
+                                                  (context, ref, child) {
+                                                final res = ref.watch(
+                                                    songArtProvider(int.parse(
+                                                        metadata.id)));
 
-                                              return res.when(
-                                                data: (data) {
-                                                  if (data != null) {
-                                                    return FittedBox(
-                                                        fit: BoxFit.cover,
-                                                        child:
-                                                            Image.memory(data));
-                                                  } else {
-                                                    return const Icon(
-                                                      Icons.music_note_rounded,
-                                                      size: 120,
-                                                      color: AppColors.white,
-                                                    );
-                                                  }
-                                                },
-                                                error: (e, s) => const Icon(
-                                                  Icons.music_note_rounded,
-                                                  color: AppColors.white,
-                                                  size: 120,
-                                                ),
-                                                loading: () => const Icon(
-                                                  Icons.music_note_rounded,
-                                                  size: 120,
-                                                  color: AppColors.white,
-                                                ),
-                                              );
-                                            }),
+                                                return res.when(
+                                                  data: (data) {
+                                                    if (data != null) {
+                                                      return FittedBox(
+                                                          fit: BoxFit.cover,
+                                                          child: Image.memory(
+                                                              data));
+                                                    } else {
+                                                      return const Icon(
+                                                        Icons
+                                                            .music_note_rounded,
+                                                        size: 120,
+                                                        color: AppColors.white,
+                                                      );
+                                                    }
+                                                  },
+                                                  error: (e, s) => const Icon(
+                                                    Icons.music_note_rounded,
+                                                    color: AppColors.white,
+                                                    size: 120,
+                                                  ),
+                                                  loading: () => const Icon(
+                                                    Icons.music_note_rounded,
+                                                    size: 120,
+                                                    color: AppColors.white,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
                                           ),
                                         ),
                                       ),

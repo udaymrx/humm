@@ -13,7 +13,7 @@ final settingsProvider = Provider<SettingsService>((ref) {
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class AppThemeNotifier extends StateNotifier<ThemeMode> {
-  AppThemeNotifier(this.ref) : super(ThemeMode.system) {
+  AppThemeNotifier(this.ref) : super(ThemeMode.light) {
     loadSettings();
   }
 

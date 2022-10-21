@@ -19,7 +19,7 @@ class UserPreferences {
 
   static String get language => _preferences.getString(_language) ?? "en";
 
-  static int get selectedTheme => _preferences.getInt(_selectedTheme) ?? 0;
+  static int get selectedTheme => _preferences.getInt(_selectedTheme) ?? 2;
 
   static Future removeUser() async {
     await _preferences.remove(_language);
