@@ -13,6 +13,9 @@ class MiniMusicPlayer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // var brightness = MediaQuery.of(context).platformBrightness;
+    final themeMode = ref.watch(themeController);
+    bool isDarkMode = themeMode == ThemeMode.dark;
     final res = ref.watch(metaDataProvider);
     final queued = ref.watch(musicQueuedProvider);
 
@@ -51,160 +54,166 @@ class MiniMusicPlayer extends ConsumerWidget {
               ref.read(musicQueuedProvider.state).state = false;
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              children: [
-                Hero(
-                  tag: "Art",
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: AppColors.primary,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Consumer(builder: (context, ref, child) {
-                        final res =
-                            ref.watch(songArtProvider(int.parse(metadata.id)));
+          child: Container(
+            color: isDarkMode ? const Color(0xFF313131) : Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Hero(
+                    tag: "Art",
+                    child: Container(
+                      height: 56,
+                      width: 56,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.primary,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Consumer(builder: (context, ref, child) {
+                          final res = ref
+                              .watch(songArtProvider(int.parse(metadata.id)));
 
-                        return res.when(
-                          data: (data) {
-                            if (data != null) {
-                              return FittedBox(
-                                  fit: BoxFit.cover, child: Image.memory(data));
+                          return res.when(
+                            data: (data) {
+                              if (data != null) {
+                                return FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Image.memory(data));
+                              } else {
+                                return const Icon(
+                                  Icons.music_note_rounded,
+                                  size: 30,
+                                  color: AppColors.white,
+                                );
+                              }
+                            },
+                            error: (e, s) => const Icon(
+                              Icons.music_note_rounded,
+                              color: AppColors.white,
+                              size: 30,
+                            ),
+                            loading: () => const Icon(
+                              Icons.music_note_rounded,
+                              size: 30,
+                              color: AppColors.white,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Hero(
+                          tag: 'title',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              metadata.title,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Hero(
+                          tag: 'artist',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              metadata.artist == "<unknown>"
+                                  ? "Unknown Artist"
+                                  : metadata.artist!,
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.greyStrong),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  // SvgPicture.asset(
+                  //   'assets/images/play3.svg',
+                  //   // color: AppColors.primary,
+                  // ),
+                  Consumer(builder: (context, ref, child) {
+                    final res = ref.watch(playerStateProvider);
+                    final player = ref.read(playerProvider);
+
+                    ref.listen(playerStateProvider, (previous, next) {
+                      next.whenData((value) {
+                        if (value.processingState ==
+                            ProcessingState.completed) {
+                          debugPrint("playing completed");
+                          player.stop();
+                        }
+                      });
+                    });
+
+                    return res.when(
+                      data: (state) {
+                        return IconButton(
+                          onPressed: () {
+                            if (state.playing) {
+                              player.pause();
                             } else {
-                              return const Icon(
-                                Icons.music_note,
-                                size: 30,
-                                color: AppColors.white,
-                              );
+                              player.play();
                             }
                           },
-                          error: (e, s) => const Icon(
-                            Icons.music_note,
-                            color: AppColors.white,
-                            size: 30,
-                          ),
-                          loading: () => const Icon(
-                            Icons.music_note,
-                            size: 30,
-                            color: AppColors.white,
+                          icon: Icon(
+                            state.playing
+                                ? Icons.pause_circle_filled_rounded
+                                : Icons.play_circle_fill_rounded,
+                            size: 36,
+                            color: AppColors.primary,
                           ),
                         );
-                      }),
+                      },
+                      error: (error, st) => const SizedBox(),
+                      loading: () => const CircularProgressIndicator(),
+                    );
+                  }),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(30),
+                    onTap: () {
+                      final player = ref.read(playerProvider);
+                      if (player.hasNext) {
+                        player.seekToNext();
+                        if (!player.playing) {
+                          player.play();
+                        }
+                      } else {
+                        if (player.playing) {
+                          player.pause();
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("No more song in the queue")));
+                      }
+                    },
+                    child: const Icon(
+                      Icons.skip_next_rounded,
+                      size: 26,
+                      color: AppColors.primary,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Hero(
-                        tag: 'title',
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Text(
-                            metadata.title,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Hero(
-                        tag: 'artist',
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Text(
-                            metadata.artist == "<unknown>"
-                                ? "Unknown Artist"
-                                : metadata.artist!,
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.greyStrong),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                // SvgPicture.asset(
-                //   'assets/images/play3.svg',
-                //   // color: AppColors.primary,
-                // ),
-                Consumer(builder: (context, ref, child) {
-                  final res = ref.watch(playerStateProvider);
-                  final player = ref.read(playerProvider);
-
-                  ref.listen(playerStateProvider, (previous, next) {
-                    next.whenData((value) {
-                      if (value.processingState == ProcessingState.completed) {
-                        debugPrint("playing completed");
-                        player.stop();
-                      }
-                    });
-                  });
-
-                  return res.when(
-                    data: (state) {
-                      return IconButton(
-                        onPressed: () {
-                          if (state.playing) {
-                            player.pause();
-                          } else {
-                            player.play();
-                          }
-                        },
-                        icon: Icon(
-                          state.playing
-                              ? Icons.pause_circle_filled_rounded
-                              : Icons.play_circle_fill_rounded,
-                          size: 36,
-                          color: AppColors.primary,
-                        ),
-                      );
-                    },
-                    error: (error, st) => const SizedBox(),
-                    loading: () => const CircularProgressIndicator(),
-                  );
-                }),
-                InkWell(
-                  borderRadius: BorderRadius.circular(30),
-                  onTap: () {
-                    final player = ref.read(playerProvider);
-                    if (player.hasNext) {
-                      player.seekToNext();
-                      if (!player.playing) {
-                        player.play();
-                      }
-                    } else {
-                      if (player.playing) {
-                        player.pause();
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("No more song in the queue")));
-                    }
-                  },
-                  child: const Icon(
-                    Icons.skip_next_rounded,
-                    size: 26,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-              ],
+                  const SizedBox(width: 12),
+                ],
+              ),
             ),
           ),
         );

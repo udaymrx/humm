@@ -17,52 +17,62 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const MiniMusicPlayer(),
-        BottomNavigationBar(
-          currentIndex: widget.tabsRouter.activeIndex,
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 12,
-          unselectedItemColor: AppColors.grey,
-          onTap: widget.tabsRouter.setActiveIndex,
-          items: [
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/home_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/home.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/heart_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/heart.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Favorites',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/playlist_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/playlist.svg',
-                color: AppColors.grey,
-              ),
-              label: 'Playlists',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/settings_fill.svg'),
-              icon: SvgPicture.asset(
-                'assets/images/settings.svg',
-                color: AppColors.grey,
-              ),
-              label: "Settings",
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          offset: Offset(0, -2),
+          blurRadius: 4,
+          spreadRadius: 2,
         ),
-      ],
+      ]),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const MiniMusicPlayer(),
+          BottomNavigationBar(
+            currentIndex: widget.tabsRouter.activeIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 12,
+            unselectedItemColor: AppColors.grey,
+            onTap: widget.tabsRouter.setActiveIndex,
+            items: [
+              BottomNavigationBarItem(
+                activeIcon: SvgPicture.asset('assets/images/home_fill.svg'),
+                icon: SvgPicture.asset(
+                  'assets/images/home.svg',
+                  color: AppColors.grey,
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: SvgPicture.asset('assets/images/heart_fill.svg'),
+                icon: SvgPicture.asset(
+                  'assets/images/heart.svg',
+                  color: AppColors.grey,
+                ),
+                label: 'Favorites',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: SvgPicture.asset('assets/images/playlist_fill.svg'),
+                icon: SvgPicture.asset(
+                  'assets/images/playlist.svg',
+                  color: AppColors.grey,
+                ),
+                label: 'Playlists',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: SvgPicture.asset('assets/images/settings_fill.svg'),
+                icon: SvgPicture.asset(
+                  'assets/images/settings.svg',
+                  color: AppColors.grey,
+                ),
+                label: "Settings",
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

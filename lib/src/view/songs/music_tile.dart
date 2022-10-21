@@ -38,19 +38,19 @@ class MusicTile extends StatelessWidget {
                       );
                     } else {
                       return const Icon(
-                        Icons.music_note,
+                        Icons.music_note_rounded,
                         size: 30,
                         color: AppColors.white,
                       );
                     }
                   },
                   error: (e, s) => const Icon(
-                    Icons.music_note,
+                    Icons.music_note_rounded,
                     color: AppColors.white,
                     size: 30,
                   ),
                   loading: () => const Icon(
-                    Icons.music_note,
+                    Icons.music_note_rounded,
                     size: 30,
                     color: AppColors.white,
                   ),

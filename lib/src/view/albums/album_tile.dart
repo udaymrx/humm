@@ -46,19 +46,19 @@ class AlbumTile extends StatelessWidget {
                             fit: BoxFit.cover, child: Image.memory(data));
                       } else {
                         return const Icon(
-                          Icons.music_note,
+                          Icons.music_note_rounded,
                           size: 60,
                           color: AppColors.white,
                         );
                       }
                     },
                     error: (e, s) => const Icon(
-                      Icons.music_note,
+                      Icons.music_note_rounded,
                       size: 60,
                       color: AppColors.white,
                     ),
                     loading: () => const Icon(
-                      Icons.music_note,
+                      Icons.music_note_rounded,
                       size: 60,
                       color: AppColors.white,
                     ),
