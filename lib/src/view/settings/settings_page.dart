@@ -37,8 +37,8 @@ class SettingsPage extends StatelessWidget {
                             ? Colors.grey[800]
                             : AppColors.offWhite,
                       ),
-                      SizedBox(width: 16),
-                      Text(
+                      const SizedBox(width: 16),
+                      const Text(
                         "Dark Mode",
                         style: TextStyle(
                           fontSize: 16,

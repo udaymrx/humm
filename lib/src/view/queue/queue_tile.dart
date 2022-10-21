@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/colors.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-
-import '../../utils/playlists_bottom_sheet.dart';
 
 class QueueTile extends StatelessWidget {
   const QueueTile({super.key, required this.song, this.isPlaying = false});

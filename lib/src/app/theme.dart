@@ -13,7 +13,7 @@ class HAppTheme {
         seedColor: const Color(0xff06C149),
         secondary: const Color(0xff06C149),
       ),
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: const IconThemeData(color: Colors.black),
       textTheme: base.textTheme.apply(fontFamily: "Urbanist"),
       useMaterial3: true,
     );
@@ -29,7 +29,7 @@ class HAppTheme {
         primary: const Color(0xff06C149),
         secondary: const Color(0xff06C149),
       ),
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Colors.white),
       textTheme: base.textTheme.apply(fontFamily: "Urbanist"),
       useMaterial3: true,
     );
@@ -113,7 +113,7 @@ class GalleryThemeData {
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
 
-  static final TextTheme _textTheme = TextTheme(
+  static const TextTheme _textTheme = TextTheme(
     headlineMedium:
         TextStyle(fontWeight: _bold, fontSize: 20.0, fontFamily: "Urbanist"),
     bodySmall: TextStyle(
