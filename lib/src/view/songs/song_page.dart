@@ -8,6 +8,7 @@ import 'package:humm/src/app/router/router.gr.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../app/global_provider.dart';
 
@@ -169,18 +170,20 @@ class SongPage extends ConsumerWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 16),
-                                  Hero(
-                                    tag: "title",
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: Text(
-                                        metadata.title,
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                  SizedBox(
+                                    height: 40,
+                                    child: Hero(
+                                      tag: "title",
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: Marquee(
+                                          text: metadata.title,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          blankSpace: 40.0,
+                                          startPadding: 10.0,),
                                       ),
                                     ),
                                   ),

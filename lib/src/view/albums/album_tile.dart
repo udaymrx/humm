@@ -71,7 +71,7 @@ class AlbumTile extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(4, 8, 0, 8),
             child: Row(
               children: [
-                Flexible(
+                Expanded(
                   child: Text(
                     album.album,
                     style: const TextStyle(

@@ -5,6 +5,7 @@ import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/app/router/router.gr.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../../app/colors.dart';
 
@@ -109,18 +110,22 @@ class MiniMusicPlayer extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Hero(
-                          tag: 'title',
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Text(
-                              metadata.title,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                        SizedBox(
+                          height: 20,
+                          child: Hero(
+                            tag: 'title',
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Marquee(
+                                text: metadata.title,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                velocity: 30.0,
+                                blankSpace: 40.0,
+                                startPadding: 10.0,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
@@ -145,7 +150,7 @@ class MiniMusicPlayer extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const Spacer(),
+                  // const Spacer(),
                   // SvgPicture.asset(
                   //   'assets/images/play3.svg',
                   //   // color: AppColors.primary,

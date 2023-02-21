@@ -23,6 +23,7 @@ dependencies:
   json_annotation: ^4.7.0
   just_audio: ^0.9.29
   just_audio_background: ^0.0.1-beta.7
+  marquee: ^2.2.3
   on_audio_query: ^2.6.1
   on_audio_room: ^2.2.1+1
   shared_preferences: ^2.0.15
