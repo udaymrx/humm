@@ -128,7 +128,7 @@ class QueueController extends StateNotifier<ConcatenatingAudioSource> {
   Future<void> dumpQueue() async {
     await state.clear();
     ref.read(playerProvider).stop(); // Can be awaited
-    ref.read(queueHashcodeProvider.state).state = null;
+    ref.read(queueHashcodeProvider.notifier).state = null;
   }
 
   // Future<void> addPlaylist(List<SongModel> songsList) async {

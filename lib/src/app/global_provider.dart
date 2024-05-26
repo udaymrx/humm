@@ -66,8 +66,9 @@ final songsToAddProvider =
   return SongsToAddNotifier();
 });
 
-final songsOfPlaylistProvider = StateNotifierProvider.autoDispose.family<
-    PlaylistSongListNotifier, AsyncValue<List<SongEntity>>, int>((ref, key) {
+final songsOfPlaylistProvider = StateNotifierProvider.autoDispose
+    .family<PlaylistSongListNotifier, AsyncValue<List<SongEntity>>, int>(
+        (ref, key) {
   return PlaylistSongListNotifier(ref, key: key);
 });
 
@@ -120,12 +121,12 @@ final playingIndexProvider = StreamProvider<int?>((ref) {
 final remainingProvider = StreamProvider<Duration>((ref) {
   StreamController<Duration> st = StreamController();
   var myStr = st.stream.asBroadcastStream();
-  ref.watch(durationProvider.stream).listen((durt) {
-    ref.watch(positionProvider.stream).listen((position) {
-      var duration = durt ?? Duration.zero;
+  ref.listen(durationProvider, (prev, durt) {
+    ref.listen(positionProvider, (prv, position) {
+      var duration = durt.value ?? Duration.zero;
       Duration remaining = Duration.zero;
-      if (duration >= position) {
-        remaining = duration - position;
+      if (duration >= position.value!) {
+        remaining = duration - position.value!;
       }
       st.add(remaining);
     });
@@ -136,9 +137,9 @@ final remainingProvider = StreamProvider<Duration>((ref) {
 final dragProvider = StreamProvider<PositionData>((ref) {
   StreamController<PositionData> st = StreamController();
   var myStr = st.stream.asBroadcastStream();
-  ref.watch(durationProvider.stream).listen((durt) {
-    ref.watch(positionProvider.stream).listen((post) {
-      st.add(PositionData(post, durt ?? Duration.zero));
+  ref.listen(durationProvider, (prv, durt) {
+    ref.listen(positionProvider, (pr, post) {
+      st.add(PositionData(post.value!, durt.value ?? Duration.zero));
     });
   });
   return myStr;

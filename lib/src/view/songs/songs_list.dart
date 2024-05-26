@@ -40,7 +40,7 @@ class _SongsListState extends State<SongsList> {
                             .read(queueController.notifier)
                             .setQueue(songsList);
 
-                        ref.read(queueHashcodeProvider.state).state =
+                        ref.read(queueHashcodeProvider.notifier).state =
                             songsList.hashCode;
 
                         print("avail indices: ${player.effectiveIndices}");
@@ -62,12 +62,12 @@ class _SongsListState extends State<SongsList> {
                               .read(queueController.notifier)
                               .setQueue(songsList);
 
-                          ref.read(queueHashcodeProvider.state).state =
+                          ref.read(queueHashcodeProvider.notifier).state =
                               songsList.hashCode;
 
                           await player.seek(Duration.zero, index: index);
 
-                          ref.read(musicQueuedProvider.state).state = true;
+                          ref.read(musicQueuedProvider.notifier).state = true;
 
                           if (!player.playing) {
                             await player.play();

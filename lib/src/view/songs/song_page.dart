@@ -79,8 +79,8 @@ class SongPage extends ConsumerWidget {
                               onTap: () {
                                 context.router.push(const QueueRoute());
                               },
-                              child: Row(
-                                children: const [
+                              child: const Row(
+                                children: [
                                   Icon(Icons.queue_music_rounded),
                                   SizedBox(width: 12),
                                   Text("Show Queue"),

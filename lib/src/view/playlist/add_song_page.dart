@@ -141,10 +141,10 @@ class SongCheckWidget extends ConsumerWidget {
       onChanged: (newState) {
         if (newState != null) {
           if (newState) {
-            ref.read(songcheckProvider(song.id).state).state = newState;
+            ref.read(songcheckProvider(song.id).notifier).state = newState;
             ref.read(songsToAddProvider.notifier).addSong(song);
           } else {
-            ref.read(songcheckProvider(song.id).state).state = newState;
+            ref.read(songcheckProvider(song.id).notifier).state = newState;
             ref.read(songsToAddProvider.notifier).removeSong(song.id);
           }
         }

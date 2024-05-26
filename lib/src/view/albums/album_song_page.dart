@@ -44,12 +44,12 @@ class AlbumSongsList extends ConsumerWidget {
 
                 await ref.read(queueController.notifier).setQueue(songsList);
 
-                ref.read(queueHashcodeProvider.state).state =
+                ref.read(queueHashcodeProvider.notifier).state =
                     songsList.hashCode;
 
                 await player.seek(Duration.zero, index: index);
 
-                ref.read(musicQueuedProvider.state).state = true;
+                ref.read(musicQueuedProvider.notifier).state = true;
 
                 await player.play();
               } else {
@@ -59,12 +59,12 @@ class AlbumSongsList extends ConsumerWidget {
 
                   await ref.read(queueController.notifier).setQueue(songsList);
 
-                  ref.read(queueHashcodeProvider.state).state =
+                  ref.read(queueHashcodeProvider.notifier).state =
                       songsList.hashCode;
 
                   await player.seek(Duration.zero, index: index);
 
-                  ref.read(musicQueuedProvider.state).state = true;
+                  ref.read(musicQueuedProvider.notifier).state = true;
 
                   if (!player.playing) {
                     await player.play();

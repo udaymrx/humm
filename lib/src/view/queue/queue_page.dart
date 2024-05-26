@@ -34,7 +34,7 @@ class QueuePage extends ConsumerWidget {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     await ref.read(queueController.notifier).dumpQueue();
-                    ref.read(musicQueuedProvider.state).state = false;
+                    ref.read(musicQueuedProvider.notifier).state = false;
                   } else {
                     Navigator.pop(context);
                     await ref.read(queueController.notifier).clearKeepSingle();

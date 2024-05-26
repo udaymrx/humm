@@ -52,7 +52,7 @@ class MiniMusicPlayer extends ConsumerWidget {
             if (swipeDirection == 'Down') {
               //handle swipe down event
               await ref.read(queueController.notifier).dumpQueue();
-              ref.read(musicQueuedProvider.state).state = false;
+              ref.read(musicQueuedProvider.notifier).state = false;
             }
           },
           child: Container(

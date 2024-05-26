@@ -79,7 +79,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
                             .read(queueController.notifier)
                             .setPlaylistQueue(songsList);
 
-                        ref.read(queueHashcodeProvider.state).state =
+                        ref.read(queueHashcodeProvider.notifier).state =
                             songsList.hashCode;
 
                         print("avail indices: ${player.effectiveIndices}");
@@ -89,7 +89,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
 
                         print("seeked to $index");
 
-                        ref.read(musicQueuedProvider.state).state = true;
+                        ref.read(musicQueuedProvider.notifier).state = true;
 
                         await player.play();
                       } else {
@@ -102,7 +102,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
                               .read(queueController.notifier)
                               .setPlaylistQueue(songsList);
 
-                          ref.read(queueHashcodeProvider.state).state =
+                          ref.read(queueHashcodeProvider.notifier).state =
                               songsList.hashCode;
 
                           print("avail indices: ${player.effectiveIndices}");
@@ -112,7 +112,7 @@ class _PlaylistSongListState extends State<PlaylistSongList> {
 
                           print("seeked to ${player.currentIndex}");
 
-                          ref.read(musicQueuedProvider.state).state = true;
+                          ref.read(musicQueuedProvider.notifier).state = true;
 
                           if (!player.playing) {
                             await player.play();
