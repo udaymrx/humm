@@ -25,7 +25,7 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
         <key>NSAppleMusicUsageDescription</key>
-        <string>$(PROJECT_NAME) requires access to media library</string>
+        <string>We need access to your music library to display songs on the device.</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>audio</string>

@@ -9,16 +9,7 @@ class AudioQueryService {
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
   Future<bool> requestPermission() async {
-    bool permissionStatus = false;
-
-    // Web platform don't support permissions methods.
-    if (!kIsWeb) {
-      permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        permissionStatus = await _audioQuery.permissionsRequest();
-      }
-    }
-    return permissionStatus;
+    return await _audioQuery.checkAndRequest();
   }
 
   Future<bool> checkPermission() async {
