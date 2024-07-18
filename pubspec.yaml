@@ -52,6 +52,7 @@ flutter_native_splash:
     image_dark: assets/images/logo.png
     icon_background_color_dark: "#181A20"
 
+  ios: true
   web: false
 
 flutter:
