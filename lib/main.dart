@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/global_provider.dart';
 import 'package:humm/src/services/shared_preferences.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'src/app.dart';
 
@@ -17,6 +18,9 @@ void main() async {
 
 Future<void> initializeApp() async {
   await UserPreferences.init();
+  await UserPreferences.setAppPath(
+      (await getApplicationDocumentsDirectory()).path);
+
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',

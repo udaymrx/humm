@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humm/src/app/router/router.gr.dart';
+import 'package:humm/src/services/shared_preferences.dart';
 import 'package:humm/src/view/main/widgets/bottom_nav_bar.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -14,6 +17,18 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
+  @override
+  void dispose() {
+    if (Platform.isIOS) {
+      resetTempDirectory();
+    }
+    super.dispose();
+  }
+
+  Future<void> resetTempDirectory() async {
+    await UserPreferences.removeAppPath();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(

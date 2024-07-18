@@ -68,8 +68,6 @@ class MyApp extends ConsumerWidget {
           ),
           routeInformationProvider: _appRouter.routeInfoProvider(),
           routeInformationParser: _appRouter.defaultRouteParser(),
-          // initialRoute: MainPage.routeName,
-          // onGenerateRoute: RouterNav.generateRoute,
         );
       },
     );
